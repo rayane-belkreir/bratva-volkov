@@ -1,0 +1,59 @@
+[
+  {
+    "id": "nord-1",
+    "name": "Quartier Nord",
+    "status": "controlled",
+    "income": 45000,
+    "note": "Zone stratégique pour la logistique. Contrôle total des entrepôts."
+  },
+  {
+    "id": "sud-2",
+    "name": "Port Sud",
+    "status": "controlled",
+    "income": 62000,
+    "note": "Point d'entrée maritime. Opérations d'import-export sécurisées."
+  },
+  {
+    "id": "centre-3",
+    "name": "Centre-Ville",
+    "status": "disputed",
+    "income": 85000,
+    "note": "Zone haute valeur. Concurrence intense avec d'autres organisations."
+  },
+  {
+    "id": "est-4",
+    "name": "Banlieue Est",
+    "status": "controlled",
+    "income": 38000,
+    "note": "Territoire stable. Activités de recouvrement établies."
+  },
+  {
+    "id": "ouest-5",
+    "name": "District Ouest",
+    "status": "neutral",
+    "income": 28000,
+    "note": "Zone d'intérêt. Évaluation en cours pour expansion future."
+  },
+  {
+    "id": "industriel-6",
+    "name": "Zone Industrielle",
+    "status": "controlled",
+    "income": 55000,
+    "note": "Infrastructure lourde. Protection renforcée requise."
+  },
+  {
+    "id": "commerce-7",
+    "name": "Quartier Commercial",
+    "status": "disputed",
+    "income": 72000,
+    "note": "Zones commerciales lucratives. Négociations en cours."
+  },
+  {
+    "id": "resid-8",
+    "name": "Secteur Résidentiel",
+    "status": "neutral",
+    "income": 15000,
+    "note": "Zone résidentielle. Influence limitée mais stable."
+  }
+]
+

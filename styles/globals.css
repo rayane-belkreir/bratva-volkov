@@ -1,0 +1,64 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: #0b0b0b;
+    --foreground: #ede8d5;
+    --gold: #c1a35f;
+    --burgundy: #3a0d12;
+  }
+
+  body {
+    @apply bg-off-black text-cream-white font-inter antialiased;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+    }
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .grain-overlay {
+    position: relative;
+  }
+
+  .grain-overlay::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: url("/texture-noise.png");
+    opacity: 0.15;
+    pointer-events: none;
+    mix-blend-mode: overlay;
+  }
+
+  .frosted-glass {
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    background: rgba(18, 18, 18, 0.7);
+  }
+
+  .gold-glow {
+    box-shadow: 0 0 20px rgba(193, 163, 95, 0.3);
+  }
+
+  .text-reveal {
+    overflow: hidden;
+  }
+}
+

@@ -1,0 +1,17 @@
+{
+  "name": "French Connexion — RP Universe",
+  "short_name": "French Connexion",
+  "description": "On ne négocie pas l'influence. On l'impose.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0B0B0B",
+  "theme_color": "#C1A35F",
+  "icons": [
+    {
+      "src": "/logo.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ]
+}
+

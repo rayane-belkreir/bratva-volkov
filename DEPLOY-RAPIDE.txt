@@ -1,0 +1,55 @@
+═══════════════════════════════════════════════════════════════
+  DÉPLOIEMENT RAPIDE - FRENCH CONNEXION
+═══════════════════════════════════════════════════════════════
+
+ÉTAPE 1 : CRÉER UN DÉPÔT GITHUB
+─────────────────────────────────
+1. Allez sur github.com
+2. Cliquez "New repository"
+3. Nom : FrenchConnexion
+4. Créez le dépôt
+
+ÉTAPE 2 : POUSSER VOTRE CODE
+─────────────────────────────
+Option A (GitHub Desktop - PLUS SIMPLE) :
+  → Téléchargez GitHub Desktop
+  → File → Add Local Repository
+  → Sélectionnez le dossier FrenchConnexion
+  → Publish repository
+
+Option B (Git en ligne de commande) :
+  git init
+  git add .
+  git commit -m "Initial commit"
+  git remote add origin https://github.com/VOTRE-USERNAME/FrenchConnexion.git
+  git push -u origin main
+
+ÉTAPE 3 : DÉPLOYER SUR VERCEL
+──────────────────────────────
+1. Sur Vercel (écran actuel) :
+   → Section "Import Git Repository" (gauche)
+   → Trouvez "FrenchConnexion"
+   → Cliquez "Import"
+
+2. Configuration :
+   → Laissez tout par défaut (Next.js détecté automatiquement)
+   → Cliquez "Deploy"
+
+3. Attendez 2-3 minutes
+
+ÉTAPE 4 : VARIABLES D'ENVIRONNEMENT
+────────────────────────────────────
+Dans Vercel → Settings → Environment Variables :
+
+Ajoutez :
+  NEXT_PUBLIC_SITE_URL = https://votre-projet.vercel.app
+  NEXT_PUBLIC_GATE_ENABLED = true
+  NEXT_PUBLIC_GATE_PASSPHRASE = ENTRER
+  DISCORD_WEBHOOK_URL = (optionnel)
+
+Puis : Redeploy
+
+═══════════════════════════════════════════════════════════════
+  VOTRE SITE SERA EN LIGNE EN 5 MINUTES !
+═══════════════════════════════════════════════════════════════
+

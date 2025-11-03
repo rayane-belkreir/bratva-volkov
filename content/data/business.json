@@ -1,0 +1,59 @@
+[
+  {
+    "name": "Logistique Avancée",
+    "cover": "Transport & Manutention SARL",
+    "description": "Opérations de transport sécurisé et gestion d'entrepôts. Couverture légitime solide.",
+    "risk": "low",
+    "contact": "Capo Nord - Équipe Logistique"
+  },
+  {
+    "name": "Recouvrement Stratégique",
+    "cover": "Conseil en Gestion Financière",
+    "description": "Services de recouvrement de créances et négociations commerciales. Réseau étendu.",
+    "risk": "medium",
+    "contact": "Capo Nord - Équipe Recouvrement"
+  },
+  {
+    "name": "Diplomatie & Relations",
+    "cover": "Agence de Communication",
+    "description": "Gestion des relations avec partenaires et résolution de conflits par la négociation.",
+    "risk": "low",
+    "contact": "Capo Sud - Équipe Diplomatie"
+  },
+  {
+    "name": "Sécurité Préventive",
+    "cover": "Services de Sécurité Privée",
+    "description": "Protection de personnes et biens. Expertise en surveillance et garde rapprochée.",
+    "risk": "medium",
+    "contact": "Capo Sud - Équipe Sécurité"
+  },
+  {
+    "name": "Intelligence Économique",
+    "cover": "Cabinet d'Études Stratégiques",
+    "description": "Collecte d'informations et analyses de marché. Réseau d'informateurs opérationnel.",
+    "risk": "high",
+    "contact": "Capo Sud - Équipe Intelligence"
+  },
+  {
+    "name": "Gestion Financière",
+    "cover": "Conseil Fiscal & Comptable",
+    "description": "Optimisation financière et gestion d'actifs. Structure légale complexe.",
+    "risk": "medium",
+    "contact": "Capo Est - Équipe Finance"
+  },
+  {
+    "name": "Négociation Complexe",
+    "cover": "Médiation Professionnelle",
+    "description": "Résolution de conflits commerciaux et négociations à haut niveau. Expertise reconnue.",
+    "risk": "low",
+    "contact": "Capo Est - Équipe Négociation"
+  },
+  {
+    "name": "Réseaux d'Influence",
+    "cover": "Lobbying & Relations Publiques",
+    "description": "Développement de réseaux stratégiques et influence politique. Portée étendue.",
+    "risk": "high",
+    "contact": "Capo Est - Équipe Relations"
+  }
+]
+

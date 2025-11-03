@@ -1,0 +1,41 @@
+{
+  "boss": {
+    "name": "Parrain",
+    "aka": "Le Ministre du Silence"
+  },
+  "capos": [
+    {
+      "name": "Capo Nord",
+      "teams": [
+        "Logistique",
+        "Recouvrement",
+        "Protection"
+      ]
+    },
+    {
+      "name": "Capo Sud",
+      "teams": [
+        "Diplomatie",
+        "Sécurité",
+        "Intelligence"
+      ]
+    },
+    {
+      "name": "Capo Est",
+      "teams": [
+        "Finance",
+        "Négociation",
+        "Relations"
+      ]
+    }
+  ],
+  "soldiers": [
+    "Garde Noire",
+    "Loups Gris",
+    "Réseaux",
+    "Sentinel",
+    "Phantom",
+    "Shadow"
+  ]
+}
+

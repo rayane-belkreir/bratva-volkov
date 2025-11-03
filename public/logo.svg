@@ -1,0 +1,6 @@
+<svg width="120" height="120" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <circle cx="60" cy="60" r="55" stroke="#C1A35F" stroke-width="2" opacity="0.3"/>
+  <path d="M60 20 L75 45 L105 50 L85 70 L90 100 L60 85 L30 100 L35 70 L15 50 L45 45 Z" fill="#C1A35F" opacity="0.8"/>
+  <text x="60" y="110" font-family="serif" font-size="12" fill="#C1A35F" text-anchor="middle" opacity="0.6">FC</text>
+</svg>
+
