@@ -1145,6 +1145,70 @@ export default function AdminPage() {
             </div>
           </GlareCard>
         )}
+
+        {/* Section Candidatures refusées */}
+        {members.filter(m => m.status === 'rejected').length > 0 && (
+          <GlareCard className="aged-paper border-2 border-blood-red/40 mt-8">
+            <div className="flex items-center gap-3 mb-6">
+              <UserX className="w-6 h-6 md:w-8 md:h-8 text-blood-red" />
+              <h2 className="text-xl md:text-2xl font-bold text-blood-red vintage-text">
+                Candidatures refusées
+              </h2>
+              <span className="px-3 py-1 bg-blood-red/20 border border-blood-red/40 text-blood-red text-xs font-bold uppercase rounded-full">
+                {members.filter(m => m.status === 'rejected').length}
+              </span>
+            </div>
+            <div className="space-y-4">
+              {members.filter(m => m.status === 'rejected').map((applicant) => (
+                <motion.div
+                  key={applicant.id}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="bg-anthracite/50 rounded-lg p-4 md:p-6 border border-blood-red/30"
+                >
+                  <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                    <div className="flex-1">
+                      <div className="flex items-center gap-3 mb-3">
+                        <div className="w-12 h-12 bg-blood-red/20 border-2 border-blood-red/40 rounded-full flex items-center justify-center">
+                          <XCircle className="w-6 h-6 text-blood-red" />
+                        </div>
+                        <div>
+                          <h3 className="font-bold text-blood-red text-lg">{applicant.username}</h3>
+                          <p className="text-xs text-vintage-cream/60">
+                            Candidature refusée le {applicant.createdAt ? new Date(applicant.createdAt).toLocaleDateString('fr-FR') : 'Date inconnue'}
+                          </p>
+                        </div>
+                      </div>
+                      {applicant.applicationData && (
+                        <div className="space-y-2 text-sm">
+                          <div>
+                            <span className="text-blood-red font-semibold">Pseudo RP:</span>{" "}
+                            <span className="text-vintage-cream/80">{applicant.applicationData.pseudo}</span>
+                          </div>
+                          <div>
+                            <span className="text-blood-red font-semibold">Discord:</span>{" "}
+                            <span className="text-vintage-cream/80">{applicant.applicationData.discord}</span>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                    <div className="flex flex-col sm:flex-row gap-2 md:gap-3 flex-shrink-0">
+                      {user && canRemoveUser(user.role, applicant.role) && (
+                        <button
+                          onClick={() => handleDeleteMember(applicant.id)}
+                          className="px-4 py-2 bg-transparent border-2 border-blood-red/40 text-blood-red hover:bg-blood-red/10 hover:border-blood-red/60 transition-colors font-bold uppercase tracking-wider text-xs md:text-sm flex items-center justify-center gap-2 rounded-lg"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                          Supprimer
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          </GlareCard>
+        )}
       </div>
       <ConfirmComp />
       <AlertComp />
