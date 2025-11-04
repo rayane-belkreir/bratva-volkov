@@ -21,7 +21,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Bratva Volkov - RP Mafia Russe",
+  title: "Bratva Volkov",
   description: "Serveur RP GTA centré sur une famille mafieuse russe. Family. Honor. Respect.",
 };
 
