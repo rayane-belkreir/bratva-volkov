@@ -1030,7 +1030,14 @@ export default function AdminPage() {
               {members.length === 0 ? (
                 <p className="text-center text-vintage-cream/60 py-8">Aucun membre trouvé</p>
               ) : (
-                members.map((member) => (
+                members
+                  .filter((m) => {
+                    // Filtrer les membres avec des IDs invalides
+                    if (!m || !m.id) return false;
+                    const memberIdStr = String(m.id).trim();
+                    return memberIdStr.length === 24 && /^[0-9a-fA-F]{24}$/.test(memberIdStr);
+                  })
+                  .map((member) => (
                   <div
                     key={member.id}
                     className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-3 md:p-4 bg-anthracite/50 rounded-lg border border-patina-gold/20"
@@ -1378,7 +1385,15 @@ export default function AdminPage() {
               </span>
             </div>
             <div className="space-y-4">
-              {members.filter(m => m.status === 'pending').map((applicant) => (
+              {members
+                .filter((m) => {
+                  // Filtrer les membres avec des IDs invalides
+                  if (!m || !m.id) return false;
+                  const memberIdStr = String(m.id).trim();
+                  const hasValidId = memberIdStr.length === 24 && /^[0-9a-fA-F]{24}$/.test(memberIdStr);
+                  return m.status === 'pending' && hasValidId;
+                })
+                .map((applicant) => (
                 <motion.div
                   key={applicant.id}
                   initial={{ opacity: 0, y: 20 }}
