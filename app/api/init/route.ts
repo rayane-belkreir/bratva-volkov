@@ -5,7 +5,7 @@ import Contract from '@/models/Contract';
 import Article from '@/models/Article';
 import bcrypt from 'bcryptjs';
 
-export async function POST(request: Request) {
+async function initializeDatabase() {
   try {
     await connectDB();
 
@@ -158,7 +158,7 @@ export async function POST(request: Request) {
     // Si rien n'a été créé, c'est que tout existe déjà
     const allExist = createdUsers.length === 0 && createdContracts.length === 0 && createdArticles.length === 0;
     
-    return NextResponse.json({
+    return {
       success: true,
       message: allExist 
         ? 'Données déjà initialisées' 
@@ -169,11 +169,44 @@ export async function POST(request: Request) {
         articles: createdArticles,
       },
       alreadyInitialized: allExist,
-    });
+    };
+  } catch (error: any) {
+    console.error('Error initializing data:', error);
+    throw error;
+  }
+}
+
+// GET - Permet d'initialiser via le navigateur
+export async function GET() {
+  try {
+    const result = await initializeDatabase();
+    return NextResponse.json(result);
   } catch (error: any) {
     console.error('Error initializing data:', error);
     return NextResponse.json(
-      { error: 'Erreur lors de l\'initialisation des données', details: error.message },
+      { 
+        error: 'Erreur lors de l\'initialisation des données', 
+        details: error.message,
+        hint: 'Vérifiez que MONGODB_URI est configuré dans Vercel et que MongoDB Atlas autorise les connexions (Network Access)'
+      },
+      { status: 500 }
+    );
+  }
+}
+
+// POST - Permet d'initialiser via l'API
+export async function POST(request: Request) {
+  try {
+    const result = await initializeDatabase();
+    return NextResponse.json(result);
+  } catch (error: any) {
+    console.error('Error initializing data:', error);
+    return NextResponse.json(
+      { 
+        error: 'Erreur lors de l\'initialisation des données', 
+        details: error.message,
+        hint: 'Vérifiez que MONGODB_URI est configuré dans Vercel et que MongoDB Atlas autorise les connexions (Network Access)'
+      },
       { status: 500 }
     );
   }
