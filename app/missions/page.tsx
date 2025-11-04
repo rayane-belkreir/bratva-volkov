@@ -329,8 +329,28 @@ export default function MissionsPage() {
       r.username === requestUsername ? { ...r, status: "accepted" as const } : r
     );
 
+    // Vérifier que l'ID est valide
+    if (!contract.id) {
+      alert({
+        title: "Erreur",
+        message: "Impossible d'accepter l'invitation : ID invalide",
+        type: "danger",
+      });
+      return;
+    }
+
+    const contractIdStr = String(contract.id).trim();
+    if (contractIdStr.length !== 24 || !/^[0-9a-fA-F]{24}$/.test(contractIdStr)) {
+      alert({
+        title: "Erreur",
+        message: "Impossible d'accepter l'invitation : ID invalide (format MongoDB requis)",
+        type: "danger",
+      });
+      return;
+    }
+
     // Ajouter le membre à l'équipe
-    const updatedContract = await updateContract(contract.id, {
+    const updatedContract = await updateContract(contractIdStr, {
       teamMembers: [...(contract.teamMembers || []), requestUsername],
       teamRequests: updatedRequests,
     });
