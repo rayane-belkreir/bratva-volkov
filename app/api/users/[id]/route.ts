@@ -46,7 +46,13 @@ export async function PUT(request: NextRequest, context: RouteContext) {
       return NextResponse.json({ error: 'User not found' }, { status: 404 });
     }
 
-    return NextResponse.json(user);
+    // Convertir _id en id pour compatibilité
+    const formattedUser = {
+      ...user,
+      id: user._id.toString(),
+    };
+
+    return NextResponse.json(formattedUser);
   } catch (error) {
     console.error('Error updating user:', error);
     return NextResponse.json({ error: 'Error updating user' }, { status: 500 });

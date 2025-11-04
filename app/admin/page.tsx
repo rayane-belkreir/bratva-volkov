@@ -87,13 +87,19 @@ export default function AdminPage() {
       try {
         const userToApprove = members.find(u => u.id === userId);
         if (userToApprove) {
-          await updateUser(userId, {
+          const result = await updateUser(userId, {
             status: 'approved',
             money: 10000, // Donner l'argent de départ
             reputation: 0,
           });
-          // Rafraîchir immédiatement
-          refreshData();
+          
+          if (!result) {
+            throw new Error("L'approbation a échoué");
+          }
+          
+          // Attendre que les données soient rafraîchies
+          await refreshData();
+          
           alert({
             title: "Succès",
             message: "Candidature approuvée avec succès",
@@ -134,11 +140,17 @@ export default function AdminPage() {
       cancelText: "Annuler",
     }, async () => {
       try {
-        await updateUser(userId, {
+        const result = await updateUser(userId, {
           status: 'rejected',
         });
-        // Rafraîchir immédiatement
-        refreshData();
+        
+        if (!result) {
+          throw new Error("Le refus a échoué");
+        }
+        
+        // Attendre que les données soient rafraîchies
+        await refreshData();
+        
         alert({
           title: "Candidature refusée",
           message: "La candidature a été refusée.",
@@ -220,15 +232,23 @@ export default function AdminPage() {
       return;
     }
     try {
-      await addUser({
+      const result = await addUser({
         ...newMember,
         role: newMember.role as "Bratan" | "Soldat" | "Avtoritet" | "Vor" | "Sovetnik" | "Pervyi" | "Pakhan" | "Admin",
         email: undefined,
       });
+      
+      if (!result) {
+        throw new Error("L'ajout a échoué");
+      }
+      
       setNewMember({ username: "", password: "", role: "Bratan", reputation: 0, money: 0 });
       setShowAddMember(false);
       setEditingMember(null);
-      refreshData();
+      
+      // Attendre que les données soient rafraîchies
+      await refreshData();
+      
       alert({
         title: "Succès",
         message: "Membre ajouté avec succès",
@@ -268,9 +288,15 @@ export default function AdminPage() {
       cancelText: "Annuler",
     }, async () => {
       try {
-        await deleteUser(userId);
-        // Rafraîchir immédiatement
-        refreshData();
+        const success = await deleteUser(userId);
+        
+        if (!success) {
+          throw new Error("La suppression a échoué");
+        }
+        
+        // Attendre que les données soient rafraîchies
+        await refreshData();
+        
         alert({
           title: "Membre retiré",
           message: "Le membre a été retiré de la famille.",
@@ -337,19 +363,26 @@ export default function AdminPage() {
     }
 
     try {
-      updateUser(editingMember.id, { 
+      const result = await updateUser(editingMember.id, { 
         role: newMember.role as "Bratan" | "Soldat" | "Avtoritet" | "Vor" | "Sovetnik" | "Pervyi" | "Pakhan" | "Admin", 
         reputation: newMember.reputation, 
         money: newMember.money 
       });
+      
+      if (!result) {
+        throw new Error("La mise à jour a échoué");
+      }
+      
       setEditingMember(null);
       setShowAddMember(false);
       setNewMember({ username: "", password: "", role: "Bratan", reputation: 0, money: 0 });
-      // Rafraîchir immédiatement
-      refreshData();
+      
+      // Attendre que les données soient rafraîchies
+      await refreshData();
+      
       alert({
         title: "Succès",
-        message: "Membre mis à jour",
+        message: "Membre mis à jour avec succès",
         type: "success",
       });
     } catch (error) {
@@ -384,7 +417,7 @@ export default function AdminPage() {
           });
           return;
         }
-        await updateContract(editingContract.id, {
+        const result = await updateContract(editingContract.id, {
           type: newMission.type,
           title: newMission.title,
           description: newMission.description,
@@ -392,6 +425,11 @@ export default function AdminPage() {
           deadline: newMission.deadline,
           reward: { money: newMission.rewardMoney, reputation: newMission.rewardRep },
         });
+        
+        if (!result) {
+          throw new Error("La modification a échoué");
+        }
+        
         alert({
           title: "Succès",
           message: "Contrat modifié avec succès",
@@ -406,7 +444,7 @@ export default function AdminPage() {
           });
           return;
         }
-        await addContract({
+        const result = await addContract({
           type: newMission.type,
           title: newMission.title,
           description: newMission.description,
@@ -415,6 +453,11 @@ export default function AdminPage() {
           reward: { money: newMission.rewardMoney, reputation: newMission.rewardRep },
           status: "available",
         });
+        
+        if (!result) {
+          throw new Error("La création a échoué");
+        }
+        
         alert({
           title: "Succès",
           message: "Contrat créé avec succès",
@@ -424,8 +467,9 @@ export default function AdminPage() {
       setNewMission({ type: "Vol", title: "", description: "", location: "", deadline: "", rewardMoney: 0, rewardRep: 0 });
       setEditingContract(null);
       setShowAddMission(false);
-      // Rafraîchir immédiatement
-      refreshData();
+      
+      // Attendre que les données soient rafraîchies
+      await refreshData();
     } catch (error) {
       alert({
         title: "Erreur",
@@ -470,9 +514,15 @@ export default function AdminPage() {
       cancelText: "Annuler",
     }, async () => {
       try {
-        await deleteContract(missionId);
-        // Rafraîchir immédiatement
-        refreshData();
+        const success = await deleteContract(missionId);
+        
+        if (!success) {
+          throw new Error("La suppression a échoué");
+        }
+        
+        // Attendre que les données soient rafraîchies
+        await refreshData();
+        
         alert({
           title: "Mission supprimée",
           message: "La mission a été supprimée avec succès.",
@@ -513,9 +563,15 @@ export default function AdminPage() {
 
     try {
       const newReputation = (selectedUserForReputation.reputation || 0) + reputationChange;
-      await updateUser(selectedUserForReputation.id, { reputation: Math.max(0, newReputation) });
-      refreshData();
-      const updatedUser = members.find(m => m.id === selectedUserForReputation.id);
+      const result = await updateUser(selectedUserForReputation.id, { reputation: Math.max(0, newReputation) });
+      
+      if (!result) {
+        throw new Error("La mise à jour de la réputation a échoué");
+      }
+      
+      // Attendre que les données soient rafraîchies
+      await refreshData();
+      
       alert({
         title: "Réputation mise à jour",
         message: `${selectedUserForReputation.username} a maintenant ${Math.max(0, newReputation)} points de réputation.`,
@@ -523,8 +579,6 @@ export default function AdminPage() {
       });
       setSelectedUserForReputation(null);
       setReputationChange(0);
-      // Rafraîchir immédiatement
-      refreshData();
     } catch (error) {
       alert({
         title: "Erreur",

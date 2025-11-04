@@ -9,7 +9,12 @@ export async function GET() {
   try {
     await connectDB();
     const users = await User.find({}).select('-password').lean();
-    return NextResponse.json(users);
+    // Convertir les _id MongoDB en id pour compatibilité
+    const formattedUsers = users.map((user: any) => ({
+      ...user,
+      id: user._id.toString(),
+    }));
+    return NextResponse.json(formattedUsers);
   } catch (error) {
     console.error('Error fetching users:', error);
     return NextResponse.json({ error: 'Error fetching users' }, { status: 500 });
