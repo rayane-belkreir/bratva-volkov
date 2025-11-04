@@ -92,12 +92,17 @@ export default function AdminPage() {
     }, async () => {
       try {
         console.log('📝 Approving application for user:', userId);
+        
+        if (!userId) {
+          throw new Error("L'ID utilisateur n'est pas défini");
+        }
+        
         const userToApprove = members.find(u => u.id === userId);
         if (!userToApprove) {
           throw new Error("Utilisateur non trouvé");
         }
         
-        const result = await updateUser(userId, {
+        const result = await updateUser(String(userId), {
           status: 'approved',
           money: 10000, // Donner l'argent de départ
           reputation: 0,
@@ -158,7 +163,12 @@ export default function AdminPage() {
     }, async () => {
       try {
         console.log('📝 Rejecting application for user:', userId);
-        const result = await updateUser(userId, {
+        
+        if (!userId) {
+          throw new Error("L'ID utilisateur n'est pas défini");
+        }
+        
+        const result = await updateUser(String(userId), {
           status: 'rejected',
         });
         
@@ -1278,14 +1288,34 @@ export default function AdminPage() {
                     </div>
                     <div className="flex flex-col sm:flex-row gap-2 md:gap-3 flex-shrink-0">
                       <button
-                        onClick={() => handleApproveApplication(applicant.id)}
+                        onClick={() => {
+                          if (!applicant.id) {
+                            alert({
+                              title: "Erreur",
+                              message: "L'ID de la candidature n'est pas défini",
+                              type: "danger",
+                            });
+                            return;
+                          }
+                          handleApproveApplication(applicant.id);
+                        }}
                         className="px-4 py-2 bg-patina-gold text-charcoal-black hover:bg-patina-gold-light transition-colors font-bold uppercase tracking-wider text-xs md:text-sm flex items-center justify-center gap-2 rounded-lg"
                       >
                         <CheckCircle className="w-4 h-4" />
                         Approuver
                       </button>
                       <button
-                        onClick={() => handleRejectApplication(applicant.id)}
+                        onClick={() => {
+                          if (!applicant.id) {
+                            alert({
+                              title: "Erreur",
+                              message: "L'ID de la candidature n'est pas défini",
+                              type: "danger",
+                            });
+                            return;
+                          }
+                          handleRejectApplication(applicant.id);
+                        }}
                         className="px-4 py-2 bg-transparent border-2 border-blood-red/40 text-blood-red hover:bg-blood-red/10 hover:border-blood-red/60 transition-colors font-bold uppercase tracking-wider text-xs md:text-sm flex items-center justify-center gap-2 rounded-lg"
                       >
                         <XCircle className="w-4 h-4" />

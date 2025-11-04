@@ -9,10 +9,10 @@ export async function getContracts(): Promise<Contract[]> {
       return [];
     }
     const contracts = await response.json();
-    // Convertir les id MongoDB en number pour compatibilité
+    // Garder les IDs comme strings (MongoDB ObjectId)
     return contracts.map((contract: any) => ({
       ...contract,
-      id: parseInt(contract.id) || contract.id,
+      id: contract.id || contract._id?.toString() || contract.id,
     }));
   } catch (error) {
     console.error('Error fetching contracts:', error);
@@ -37,9 +37,10 @@ export async function updateContract(contractId: number | string, updates: Parti
 
     const contract = await response.json();
     console.log('✅ Contract updated successfully:', contract);
+    // Garder l'ID comme string (MongoDB ObjectId)
     return {
       ...contract,
-      id: parseInt(contract.id) || contract.id,
+      id: contract.id || contract._id?.toString() || contract.id,
     };
   } catch (error) {
     console.error('❌ Error updating contract:', error);
@@ -64,9 +65,10 @@ export async function addContract(contract: Omit<Contract, 'id'>): Promise<Contr
 
     const newContract = await response.json();
     console.log('✅ Contract added successfully:', newContract);
+    // Garder l'ID comme string (MongoDB ObjectId)
     return {
       ...newContract,
-      id: parseInt(newContract.id) || newContract.id,
+      id: newContract.id || newContract._id?.toString() || newContract.id,
     };
   } catch (error) {
     console.error('❌ Error adding contract:', error);

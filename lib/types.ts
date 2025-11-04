@@ -27,7 +27,7 @@ export interface User {
 }
 
 export interface Contract {
-  id: number;
+  id: number | string; // Peut être number (legacy) ou string (MongoDB ObjectId)
   type: string;
   title: string;
   description: string;
