@@ -386,6 +386,29 @@ export default function AdminPage() {
   const handleEditMember = (member: User) => {
     if (!user) return;
     
+    // Vérifier que le membre a un ID valide
+    if (!member || !member.id) {
+      alert({
+        title: "Erreur",
+        message: "Impossible de modifier ce membre : ID invalide",
+        type: "danger",
+      });
+      console.error('❌ Cannot edit member: invalid ID', member);
+      return;
+    }
+    
+    // Vérifier que l'ID est un string MongoDB valide (24 caractères hex)
+    const memberIdStr = String(member.id).trim();
+    if (memberIdStr.length !== 24 || !/^[0-9a-fA-F]{24}$/.test(memberIdStr)) {
+      alert({
+        title: "Erreur",
+        message: "Impossible de modifier ce membre : ID invalide (format MongoDB requis)",
+        type: "danger",
+      });
+      console.error('❌ Cannot edit member: invalid MongoDB ID format', memberIdStr);
+      return;
+    }
+    
     // Vérifier les permissions strictes
     if (!canModifyUser(user.role, member.role)) {
       alert({
