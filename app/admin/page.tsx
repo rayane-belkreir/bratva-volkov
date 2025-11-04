@@ -187,7 +187,14 @@ export default function AdminPage() {
           throw new Error("L'ID utilisateur n'est pas défini");
         }
         
-        const result = await updateUser(String(userId), {
+        const userIdStr = String(userId).trim();
+        
+        // Vérifier que l'ID est un string MongoDB valide
+        if (userIdStr.length !== 24 || !/^[0-9a-fA-F]{24}$/.test(userIdStr)) {
+          throw new Error("ID utilisateur invalide : format MongoDB requis (24 caractères hex)");
+        }
+        
+        const result = await updateUser(userIdStr, {
           status: 'rejected',
         });
         
