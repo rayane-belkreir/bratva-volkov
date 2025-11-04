@@ -119,7 +119,7 @@ export function WelcomeGuide({ isOpen, onClose }: WelcomeGuideProps) {
                     Bienvenue dans la Bratva Volkov
                   </h2>
                   <p className="text-xl text-vintage-cream/90 font-bold mb-2">
-                    La Mafia vous a accepté
+                    La Famille vous a accepté
                   </p>
                   <p className="text-vintage-cream/70 text-sm leading-relaxed max-w-2xl mx-auto">
                     Votre candidature a été approuvée. La famille compte sur vous pour maintenir la loyauté, 
