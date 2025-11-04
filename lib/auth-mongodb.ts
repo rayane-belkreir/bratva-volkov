@@ -107,8 +107,16 @@ export async function updateUser(userId: string, updates: Partial<User>): Promis
       return null;
     }
     
-    console.log('🔄 Updating user:', userId, 'with updates:', updates);
-    const response = await fetch(`${API_BASE}/users/${String(userId)}`, {
+    const userIdStr = String(userId).trim();
+    
+    // Vérifier que l'ID est un string MongoDB valide (24 caractères hex)
+    if (userIdStr.length !== 24 || !/^[0-9a-fA-F]{24}$/.test(userIdStr)) {
+      console.error('❌ Cannot update user: invalid MongoDB ID format', userIdStr);
+      return null;
+    }
+    
+    console.log('🔄 Updating user:', userIdStr, 'with updates:', updates);
+    const response = await fetch(`${API_BASE}/users/${userIdStr}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(updates),
@@ -168,8 +176,16 @@ export async function deleteUser(userId: string): Promise<boolean> {
       return false;
     }
     
-    console.log('🔄 Deleting user:', userId);
-    const response = await fetch(`${API_BASE}/users/${String(userId)}`, {
+    const userIdStr = String(userId).trim();
+    
+    // Vérifier que l'ID est un string MongoDB valide (24 caractères hex)
+    if (userIdStr.length !== 24 || !/^[0-9a-fA-F]{24}$/.test(userIdStr)) {
+      console.error('❌ Cannot delete user: invalid MongoDB ID format', userIdStr);
+      return false;
+    }
+    
+    console.log('🔄 Deleting user:', userIdStr);
+    const response = await fetch(`${API_BASE}/users/${userIdStr}`, {
       method: 'DELETE',
     });
 

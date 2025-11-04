@@ -510,8 +510,14 @@ export default function AdminPage() {
           throw new Error("Aucun contrat sélectionné pour modification");
         }
         
-        console.log('📝 Updating contract:', editingContract.id);
-        const result = await updateContract(String(editingContract.id), {
+        // Vérifier que l'ID est un string MongoDB valide
+        const contractIdStr = String(editingContract.id);
+        if (contractIdStr.length !== 24 || !/^[0-9a-fA-F]{24}$/.test(contractIdStr)) {
+          throw new Error("ID de contrat invalide : format MongoDB requis (24 caractères hex)");
+        }
+        
+        console.log('📝 Updating contract:', contractIdStr);
+        const result = await updateContract(contractIdStr, {
           type: newMission.type,
           title: newMission.title,
           description: newMission.description,
@@ -575,6 +581,29 @@ export default function AdminPage() {
   };
 
   const handleEditMission = (mission: Contract) => {
+    // Vérifier que la mission a un ID valide
+    if (!mission || !mission.id) {
+      alert({
+        title: "Erreur",
+        message: "Impossible de modifier cette mission : ID invalide",
+        type: "danger",
+      });
+      console.error('❌ Cannot edit mission: invalid ID', mission);
+      return;
+    }
+    
+    // Vérifier que l'ID est un string MongoDB valide (24 caractères hex)
+    const missionIdStr = String(mission.id);
+    if (missionIdStr.length !== 24 || !/^[0-9a-fA-F]{24}$/.test(missionIdStr)) {
+      alert({
+        title: "Erreur",
+        message: "Impossible de modifier cette mission : ID invalide (format MongoDB requis)",
+        type: "danger",
+      });
+      console.error('❌ Cannot edit mission: invalid MongoDB ID format', missionIdStr);
+      return;
+    }
+    
     setEditingContract(mission);
     setNewMission({ 
       type: mission.type, 
@@ -598,6 +627,18 @@ export default function AdminPage() {
         type: "danger",
       });
       console.error('❌ missionId is undefined');
+      return;
+    }
+    
+    // Vérifier que l'ID est un string MongoDB valide (24 caractères hex)
+    const missionIdStr = String(missionId);
+    if (missionIdStr.length !== 24 || !/^[0-9a-fA-F]{24}$/.test(missionIdStr)) {
+      alert({
+        title: "Erreur",
+        message: "Impossible de supprimer cette mission : ID invalide (format MongoDB requis)",
+        type: "danger",
+      });
+      console.error('❌ Cannot delete mission: invalid MongoDB ID format', missionIdStr);
       return;
     }
 
@@ -960,7 +1001,17 @@ export default function AdminPage() {
                     <div className="flex gap-2 flex-shrink-0">
                       {user && canModifyUser(user.role, member.role) && (
                         <button 
-                          onClick={() => handleEditMember(member)}
+                          onClick={() => {
+                            if (!member || !member.id) {
+                              alert({
+                                title: "Erreur",
+                                message: "Impossible de modifier ce membre : ID invalide",
+                                type: "danger",
+                              });
+                              return;
+                            }
+                            handleEditMember(member);
+                          }}
                           className="p-2 hover:bg-patina-gold/10 rounded transition-colors"
                           title="Modifier"
                         >

@@ -38,7 +38,14 @@ export async function updateContract(contractId: number | string, updates: Parti
       return null;
     }
     
-    const contractIdStr = String(contractId);
+    const contractIdStr = String(contractId).trim();
+    
+    // Vérifier que l'ID est un string MongoDB valide (24 caractères hex)
+    if (contractIdStr.length !== 24 || !/^[0-9a-fA-F]{24}$/.test(contractIdStr)) {
+      console.error('❌ Cannot update contract: invalid MongoDB ID format', contractIdStr);
+      return null;
+    }
+    
     console.log('🔄 Updating contract:', contractIdStr, 'with updates:', updates);
     const response = await fetch(`${API_BASE}/contracts/${contractIdStr}`, {
       method: 'PUT',
@@ -101,7 +108,14 @@ export async function deleteContract(contractId: number | string): Promise<boole
       return false;
     }
     
-    const contractIdStr = String(contractId);
+    const contractIdStr = String(contractId).trim();
+    
+    // Vérifier que l'ID est un string MongoDB valide (24 caractères hex)
+    if (contractIdStr.length !== 24 || !/^[0-9a-fA-F]{24}$/.test(contractIdStr)) {
+      console.error('❌ Cannot delete contract: invalid MongoDB ID format', contractIdStr);
+      return false;
+    }
+    
     console.log('🔄 Deleting contract:', contractIdStr);
     const response = await fetch(`${API_BASE}/contracts/${contractIdStr}`, {
       method: 'DELETE',
