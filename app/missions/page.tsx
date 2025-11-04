@@ -60,7 +60,27 @@ export default function MissionsPage() {
       return;
     }
 
-    const updatedContract = await updateContract(contract.id, {
+    // Vérifier que l'ID est valide
+    if (!contract.id) {
+      alert({
+        title: "Erreur",
+        message: "Impossible d'accepter cette mission : ID invalide",
+        type: "danger",
+      });
+      return;
+    }
+
+    const contractIdStr = String(contract.id).trim();
+    if (contractIdStr.length !== 24 || !/^[0-9a-fA-F]{24}$/.test(contractIdStr)) {
+      alert({
+        title: "Erreur",
+        message: "Impossible d'accepter cette mission : ID invalide (format MongoDB requis)",
+        type: "danger",
+      });
+      return;
+    }
+
+    const updatedContract = await updateContract(contractIdStr, {
       status: "in_progress",
       lockedBy: user.username, // Lock la mission pour cet utilisateur
       teamMembers: [user.username], // Ajouter le leader à l'équipe
@@ -89,7 +109,27 @@ export default function MissionsPage() {
       return;
     }
 
-    const updatedContract = await updateContract(contract.id, {
+    // Vérifier que l'ID est valide
+    if (!contract.id) {
+      alert({
+        title: "Erreur",
+        message: "Impossible de refuser cette mission : ID invalide",
+        type: "danger",
+      });
+      return;
+    }
+
+    const contractIdStr = String(contract.id).trim();
+    if (contractIdStr.length !== 24 || !/^[0-9a-fA-F]{24}$/.test(contractIdStr)) {
+      alert({
+        title: "Erreur",
+        message: "Impossible de refuser cette mission : ID invalide (format MongoDB requis)",
+        type: "danger",
+      });
+      return;
+    }
+
+    const updatedContract = await updateContract(contractIdStr, {
       status: "refused",
     });
 
@@ -159,7 +199,27 @@ export default function MissionsPage() {
         }
       }
 
-      await updateContract(contract.id, {
+      // Vérifier que l'ID est valide
+      if (!contract.id) {
+        alert({
+          title: "Erreur",
+          message: "Impossible de compléter cette mission : ID invalide",
+          type: "danger",
+        });
+        return;
+      }
+
+      const contractIdStr = String(contract.id).trim();
+      if (contractIdStr.length !== 24 || !/^[0-9a-fA-F]{24}$/.test(contractIdStr)) {
+        alert({
+          title: "Erreur",
+          message: "Impossible de compléter cette mission : ID invalide (format MongoDB requis)",
+          type: "danger",
+        });
+        return;
+      }
+
+      await updateContract(contractIdStr, {
         status: "completed",
       });
 
@@ -211,7 +271,27 @@ export default function MissionsPage() {
     }
 
     // Ajouter la demande
-    const updatedContract = await updateContract(contract.id, {
+    // Vérifier que l'ID est valide
+    if (!contract.id) {
+      alert({
+        title: "Erreur",
+        message: "Impossible d'envoyer une invitation : ID invalide",
+        type: "danger",
+      });
+      return;
+    }
+
+    const contractIdStr = String(contract.id).trim();
+    if (contractIdStr.length !== 24 || !/^[0-9a-fA-F]{24}$/.test(contractIdStr)) {
+      alert({
+        title: "Erreur",
+        message: "Impossible d'envoyer une invitation : ID invalide (format MongoDB requis)",
+        type: "danger",
+      });
+      return;
+    }
+
+    const updatedContract = await updateContract(contractIdStr, {
       teamRequests: [
         ...(contract.teamRequests || []),
         {
@@ -282,7 +362,27 @@ export default function MissionsPage() {
       r.username === requestUsername ? { ...r, status: "rejected" as const } : r
     );
 
-    const updatedContract = await updateContract(contract.id, {
+    // Vérifier que l'ID est valide
+    if (!contract.id) {
+      alert({
+        title: "Erreur",
+        message: "Impossible de refuser l'invitation : ID invalide",
+        type: "danger",
+      });
+      return;
+    }
+
+    const contractIdStr = String(contract.id).trim();
+    if (contractIdStr.length !== 24 || !/^[0-9a-fA-F]{24}$/.test(contractIdStr)) {
+      alert({
+        title: "Erreur",
+        message: "Impossible de refuser l'invitation : ID invalide (format MongoDB requis)",
+        type: "danger",
+      });
+      return;
+    }
+
+    const updatedContract = await updateContract(contractIdStr, {
       teamRequests: updatedRequests,
     });
 

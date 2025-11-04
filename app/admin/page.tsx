@@ -1473,7 +1473,15 @@ export default function AdminPage() {
               </span>
             </div>
             <div className="space-y-4">
-              {members.filter(m => m.status === 'rejected').map((applicant) => (
+              {members
+                .filter((m) => {
+                  // Filtrer les membres avec des IDs invalides
+                  if (!m || !m.id) return false;
+                  const memberIdStr = String(m.id).trim();
+                  const hasValidId = memberIdStr.length === 24 && /^[0-9a-fA-F]{24}$/.test(memberIdStr);
+                  return m.status === 'rejected' && hasValidId;
+                })
+                .map((applicant) => (
                 <motion.div
                   key={applicant.id}
                   initial={{ opacity: 0, y: 20 }}
