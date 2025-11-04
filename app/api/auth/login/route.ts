@@ -23,7 +23,14 @@ export async function POST(request: NextRequest) {
     }
 
     const { password: _, ...userWithoutPassword } = user.toObject();
-    return NextResponse.json(userWithoutPassword);
+    
+    // S'assurer que l'ID est correctement formaté (MongoDB ObjectId → id string)
+    const formattedUser = {
+      ...userWithoutPassword,
+      id: userWithoutPassword._id?.toString() || userWithoutPassword.id,
+    };
+    
+    return NextResponse.json(formattedUser);
   } catch (error: any) {
     console.error('Error logging in:', error);
     
