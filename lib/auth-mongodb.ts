@@ -86,8 +86,14 @@ export async function getAllUsers(): Promise<User[]> {
 
 export async function updateUser(userId: string, updates: Partial<User>): Promise<User | null> {
   try {
+    // Vérifier que l'ID est valide avant l'appel
+    if (!userId || userId === 'undefined' || userId === 'null') {
+      console.error('❌ Cannot update user: invalid ID', userId);
+      return null;
+    }
+    
     console.log('🔄 Updating user:', userId, 'with updates:', updates);
-    const response = await fetch(`${API_BASE}/users/${userId}`, {
+    const response = await fetch(`${API_BASE}/users/${String(userId)}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(updates),
@@ -141,8 +147,14 @@ export async function addUser(user: Omit<User, 'id' | 'createdAt'>): Promise<Use
 
 export async function deleteUser(userId: string): Promise<boolean> {
   try {
+    // Vérifier que l'ID est valide avant l'appel
+    if (!userId || userId === 'undefined' || userId === 'null') {
+      console.error('❌ Cannot delete user: invalid ID', userId);
+      return false;
+    }
+    
     console.log('🔄 Deleting user:', userId);
-    const response = await fetch(`${API_BASE}/users/${userId}`, {
+    const response = await fetch(`${API_BASE}/users/${String(userId)}`, {
       method: 'DELETE',
     });
 

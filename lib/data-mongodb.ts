@@ -22,8 +22,15 @@ export async function getContracts(): Promise<Contract[]> {
 
 export async function updateContract(contractId: number | string, updates: Partial<Contract>): Promise<Contract | null> {
   try {
-    console.log('🔄 Updating contract:', contractId, 'with updates:', updates);
-    const response = await fetch(`${API_BASE}/contracts/${contractId}`, {
+    // Vérifier que l'ID est valide avant l'appel
+    if (!contractId || contractId === 'undefined' || contractId === 'null') {
+      console.error('❌ Cannot update contract: invalid ID', contractId);
+      return null;
+    }
+    
+    const contractIdStr = String(contractId);
+    console.log('🔄 Updating contract:', contractIdStr, 'with updates:', updates);
+    const response = await fetch(`${API_BASE}/contracts/${contractIdStr}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(updates),
@@ -78,8 +85,15 @@ export async function addContract(contract: Omit<Contract, 'id'>): Promise<Contr
 
 export async function deleteContract(contractId: number | string): Promise<boolean> {
   try {
-    console.log('🔄 Deleting contract:', contractId);
-    const response = await fetch(`${API_BASE}/contracts/${contractId}`, {
+    // Vérifier que l'ID est valide avant l'appel
+    if (!contractId || contractId === 'undefined' || contractId === 'null') {
+      console.error('❌ Cannot delete contract: invalid ID', contractId);
+      return false;
+    }
+    
+    const contractIdStr = String(contractId);
+    console.log('🔄 Deleting contract:', contractIdStr);
+    const response = await fetch(`${API_BASE}/contracts/${contractIdStr}`, {
       method: 'DELETE',
     });
 
