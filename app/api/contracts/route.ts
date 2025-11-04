@@ -27,6 +27,8 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
     const { type, title, description, location, reward, deadline } = body;
 
+    console.log('🔄 API: Creating contract:', title);
+
     const newContract = new Contract({
       type,
       title,
@@ -42,10 +44,15 @@ export async function POST(request: NextRequest) {
     await newContract.save();
 
     const contractObj = newContract.toObject();
-    return NextResponse.json({ ...contractObj, id: contractObj._id.toString() }, { status: 201 });
-  } catch (error) {
-    console.error('Error creating contract:', error);
-    return NextResponse.json({ error: 'Error creating contract' }, { status: 500 });
+    const formattedContract = { ...contractObj, id: contractObj._id.toString() };
+    console.log('✅ API: Contract created successfully:', formattedContract.title);
+    return NextResponse.json(formattedContract, { status: 201 });
+  } catch (error: any) {
+    console.error('❌ API: Error creating contract:', error);
+    return NextResponse.json({ 
+      error: 'Error creating contract', 
+      details: error.message 
+    }, { status: 500 });
   }
 }
 

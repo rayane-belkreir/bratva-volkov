@@ -117,6 +117,7 @@ export async function updateUser(userId: string, updates: Partial<User>): Promis
 
 export async function addUser(user: Omit<User, 'id' | 'createdAt'>): Promise<User | null> {
   try {
+    console.log('🔄 Adding user:', user.username);
     const response = await fetch(`${API_BASE}/users`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -124,26 +125,35 @@ export async function addUser(user: Omit<User, 'id' | 'createdAt'>): Promise<Use
     });
 
     if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      console.error('❌ Add user failed:', response.status, errorData);
       return null;
     }
 
-    return await response.json();
+    const newUser = await response.json();
+    console.log('✅ User added successfully:', newUser);
+    return newUser;
   } catch (error) {
-    console.error('Error adding user:', error);
+    console.error('❌ Error adding user:', error);
     return null;
   }
 }
 
 export async function deleteUser(userId: string): Promise<boolean> {
   try {
+    console.log('🔄 Deleting user:', userId);
     const response = await fetch(`${API_BASE}/users/${userId}`, {
       method: 'DELETE',
     });
 
     if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      console.error('❌ Delete user failed:', response.status, errorData);
       return false;
     }
 
+    console.log('✅ User deleted successfully');
+    
     // Si l'utilisateur supprimé est l'utilisateur actuel, déconnecter
     const currentUser = getCurrentUser();
     if (currentUser?.id === userId) {
@@ -152,7 +162,7 @@ export async function deleteUser(userId: string): Promise<boolean> {
 
     return true;
   } catch (error) {
-    console.error('Error deleting user:', error);
+    console.error('❌ Error deleting user:', error);
     return false;
   }
 }

@@ -29,6 +29,8 @@ export async function PUT(request: NextRequest, context: RouteContext) {
     const { id } = await context.params;
     const body = await request.json();
 
+    console.log('🔄 API: Updating contract', id, 'with:', body);
+
     const contract: any = await Contract.findByIdAndUpdate(
       id,
       { $set: body },
@@ -36,13 +38,19 @@ export async function PUT(request: NextRequest, context: RouteContext) {
     ).lean();
 
     if (!contract) {
+      console.error('❌ API: Contract not found:', id);
       return NextResponse.json({ error: 'Contract not found' }, { status: 404 });
     }
 
-    return NextResponse.json({ ...contract, id: contract._id.toString() });
-  } catch (error) {
-    console.error('Error updating contract:', error);
-    return NextResponse.json({ error: 'Error updating contract' }, { status: 500 });
+    const formattedContract = { ...contract, id: contract._id.toString() };
+    console.log('✅ API: Contract updated successfully:', formattedContract.title);
+    return NextResponse.json(formattedContract);
+  } catch (error: any) {
+    console.error('❌ API: Error updating contract:', error);
+    return NextResponse.json({ 
+      error: 'Error updating contract', 
+      details: error.message 
+    }, { status: 500 });
   }
 }
 
@@ -51,14 +59,22 @@ export async function DELETE(request: NextRequest, context: RouteContext) {
   try {
     await connectDB();
     const { id } = await context.params;
+    console.log('🔄 API: Deleting contract', id);
+    
     const contract = await Contract.findByIdAndDelete(id);
     if (!contract) {
+      console.error('❌ API: Contract not found:', id);
       return NextResponse.json({ error: 'Contract not found' }, { status: 404 });
     }
+    
+    console.log('✅ API: Contract deleted successfully:', contract.title);
     return NextResponse.json({ message: 'Contract deleted successfully' });
-  } catch (error) {
-    console.error('Error deleting contract:', error);
-    return NextResponse.json({ error: 'Error deleting contract' }, { status: 500 });
+  } catch (error: any) {
+    console.error('❌ API: Error deleting contract:', error);
+    return NextResponse.json({ 
+      error: 'Error deleting contract', 
+      details: error.message 
+    }, { status: 500 });
   }
 }
 

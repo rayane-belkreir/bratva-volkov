@@ -22,6 +22,7 @@ export async function getContracts(): Promise<Contract[]> {
 
 export async function updateContract(contractId: number | string, updates: Partial<Contract>): Promise<Contract | null> {
   try {
+    console.log('🔄 Updating contract:', contractId, 'with updates:', updates);
     const response = await fetch(`${API_BASE}/contracts/${contractId}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
@@ -29,22 +30,26 @@ export async function updateContract(contractId: number | string, updates: Parti
     });
 
     if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      console.error('❌ Update contract failed:', response.status, errorData);
       return null;
     }
 
     const contract = await response.json();
+    console.log('✅ Contract updated successfully:', contract);
     return {
       ...contract,
       id: parseInt(contract.id) || contract.id,
     };
   } catch (error) {
-    console.error('Error updating contract:', error);
+    console.error('❌ Error updating contract:', error);
     return null;
   }
 }
 
 export async function addContract(contract: Omit<Contract, 'id'>): Promise<Contract | null> {
   try {
+    console.log('🔄 Adding contract:', contract);
     const response = await fetch(`${API_BASE}/contracts`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -52,29 +57,40 @@ export async function addContract(contract: Omit<Contract, 'id'>): Promise<Contr
     });
 
     if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      console.error('❌ Add contract failed:', response.status, errorData);
       return null;
     }
 
     const newContract = await response.json();
+    console.log('✅ Contract added successfully:', newContract);
     return {
       ...newContract,
       id: parseInt(newContract.id) || newContract.id,
     };
   } catch (error) {
-    console.error('Error adding contract:', error);
+    console.error('❌ Error adding contract:', error);
     return null;
   }
 }
 
 export async function deleteContract(contractId: number | string): Promise<boolean> {
   try {
+    console.log('🔄 Deleting contract:', contractId);
     const response = await fetch(`${API_BASE}/contracts/${contractId}`, {
       method: 'DELETE',
     });
 
-    return response.ok;
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      console.error('❌ Delete contract failed:', response.status, errorData);
+      return false;
+    }
+
+    console.log('✅ Contract deleted successfully');
+    return true;
   } catch (error) {
-    console.error('Error deleting contract:', error);
+    console.error('❌ Error deleting contract:', error);
     return false;
   }
 }

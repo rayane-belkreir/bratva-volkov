@@ -14,7 +14,6 @@ import { NewApplicationNotification } from "@/components/NewApplicationNotificat
 import { canAccessAdmin, canRemoveUser, canModifyUser, canManageRole, hasPermission } from "@/lib/permissions";
 import { useConfirm } from "@/hooks/useConfirm";
 import { useAlert } from "@/hooks/useAlert";
-import { useDataSync } from "@/hooks/useDataSync";
 
 export default function AdminPage() {
   const { user, isAuthenticated } = useAuth();
