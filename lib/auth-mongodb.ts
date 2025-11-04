@@ -75,11 +75,26 @@ export async function getAllUsers(): Promise<User[]> {
   try {
     const response = await fetch(`${API_BASE}/users`);
     if (!response.ok) {
+      console.error('❌ Failed to fetch users:', response.status);
       return [];
     }
-    return await response.json();
+    const users = await response.json();
+    // Vérifier que tous les utilisateurs ont un ID
+    const usersWithIds = users.map((user: any) => {
+      if (!user.id && !user._id) {
+        console.error('❌ User without ID:', user);
+        return null;
+      }
+      return {
+        ...user,
+        id: user.id || user._id?.toString() || user.id,
+      };
+    }).filter((u: any) => u !== null);
+    
+    console.log('✅ Users fetched:', usersWithIds.length, 'users with valid IDs');
+    return usersWithIds;
   } catch (error) {
-    console.error('Error fetching users:', error);
+    console.error('❌ Error fetching users:', error);
     return [];
   }
 }
