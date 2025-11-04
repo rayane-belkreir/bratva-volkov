@@ -10,13 +10,21 @@ export async function GET() {
     await connectDB();
     const users = await User.find({}).select('-password').lean();
     // Convertir les _id MongoDB en id pour compatibilité
-    const formattedUsers = users.map((user: any) => ({
-      ...user,
-      id: user._id.toString(),
-    }));
+    const formattedUsers = users.map((user: any) => {
+      if (!user._id) {
+        console.error('❌ User without _id:', user);
+        return null;
+      }
+      return {
+        ...user,
+        id: user._id.toString(),
+      };
+    }).filter((u: any) => u !== null);
+    
+    console.log('✅ API: Returning', formattedUsers.length, 'users');
     return NextResponse.json(formattedUsers);
   } catch (error) {
-    console.error('Error fetching users:', error);
+    console.error('❌ Error fetching users:', error);
     return NextResponse.json({ error: 'Error fetching users' }, { status: 500 });
   }
 }

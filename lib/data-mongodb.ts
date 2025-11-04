@@ -6,16 +6,26 @@ export async function getContracts(): Promise<Contract[]> {
   try {
     const response = await fetch(`${API_BASE}/contracts`);
     if (!response.ok) {
+      console.error('❌ Failed to fetch contracts:', response.status);
       return [];
     }
     const contracts = await response.json();
     // Garder les IDs comme strings (MongoDB ObjectId)
-    return contracts.map((contract: any) => ({
-      ...contract,
-      id: contract.id || contract._id?.toString() || contract.id,
-    }));
+    const contractsWithIds = contracts.map((contract: any) => {
+      if (!contract.id && !contract._id) {
+        console.error('❌ Contract without ID:', contract);
+        return null;
+      }
+      return {
+        ...contract,
+        id: contract.id || contract._id?.toString() || contract.id,
+      };
+    }).filter((c: any) => c !== null);
+    
+    console.log('✅ Contracts fetched:', contractsWithIds.length, 'contracts with valid IDs');
+    return contractsWithIds;
   } catch (error) {
-    console.error('Error fetching contracts:', error);
+    console.error('❌ Error fetching contracts:', error);
     return [];
   }
 }

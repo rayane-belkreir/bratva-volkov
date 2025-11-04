@@ -50,6 +50,18 @@ export default function AdminPage() {
       console.log('✅ Users loaded:', allUsers.length);
       console.log('✅ Contracts loaded:', allContracts.length);
       
+      // Vérifier et logger les IDs pour debug
+      allUsers.forEach((u, i) => {
+        if (!u.id) {
+          console.error(`❌ User ${i} has no ID:`, u);
+        }
+      });
+      allContracts.forEach((c, i) => {
+        if (!c.id) {
+          console.error(`❌ Contract ${i} has no ID:`, c);
+        }
+      });
+      
       // Forcer la mise à jour avec de nouvelles références
       setMembers([...allUsers]);
       setContracts([...allContracts]);
