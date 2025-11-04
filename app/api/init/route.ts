@@ -121,37 +121,42 @@ async function initializeDatabase() {
         slug: 'arrivee-liberty-city',
         title: 'Arrivée de la Famille à Liberty City',
         date: '1945-01-15',
+        author: 'Archives de la Famille',
         excerpt: 'La Bratva Volkov établit sa présence dans Liberty City après la Seconde Guerre mondiale.',
         content: 'En 1945, après la Seconde Guerre mondiale, les membres de la Bratva Volkov quittent Saint-Pétersbourg pour établir leur présence à Liberty City. Les premiers réseaux sont mis en place dans les quartiers de Broker et Dukes.',
         category: 'Histoire',
-        isLocked: false,
+        locked: false,
       },
       {
         slug: 'premiers-reseaux',
         title: 'Établissement des Premiers Réseaux',
         date: '1945-02-20',
+        author: 'Archives de la Famille',
         excerpt: 'Les premiers réseaux de protection et d\'influence sont établis dans Liberty City.',
         content: 'Les membres de la famille établissent rapidement les premiers réseaux de protection dans les quartiers de Liberty City. Des alliances sont formées avec les commerçants locaux, établissant la présence de la Bratva dans la ville.',
         category: 'Histoire',
-        isLocked: false,
+        locked: false,
       },
       {
         slug: 'nouveau-pakhan',
         title: 'Le Nouveau Pakhan',
         date: '1945-03-01',
+        author: 'Archives de la Famille',
         excerpt: 'Un nouveau Pakhan prend le contrôle de la famille après la disparition de l\'ancien.',
         content: 'L\'ancien Pakhan a été tué dans des circonstances mystérieuses. Un nouveau leader russe a pris le contrôle de la Bratva Volkov. Son identité reste secrète, seuls les membres les plus loyaux connaissent sa véritable identité.',
         category: 'Histoire',
-        isLocked: false,
+        locked: false,
       },
     ];
 
     const createdArticles = [];
     for (const articleData of defaultArticles) {
-      const existingArticle = await Article.findOne({ slug: articleData.slug });
+      const existingArticle = await Article.findOne({ title: articleData.title });
       if (!existingArticle) {
-        await Article.create(articleData);
-        createdArticles.push(articleData.slug);
+        // Retirer le slug car il n'est pas dans le modèle
+        const { slug, ...articleDataWithoutSlug } = articleData;
+        await Article.create(articleDataWithoutSlug);
+        createdArticles.push(articleData.title);
       }
     }
 
