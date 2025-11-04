@@ -15,25 +15,13 @@ export function WelcomeGuideProvider({ children }: { children: ReactNode }) {
         const welcomeKey = `fc_welcome_${user.id}`;
         const hasSeenWelcome = localStorage.getItem(welcomeKey);
         
-        // Si l'utilisateur n'a jamais vu le guide, l'afficher
+        // Si l'utilisateur n'a jamais vu le guide, l'afficher UNE SEULE FOIS
         if (!hasSeenWelcome) {
           // Attendre un peu pour que l'interface se charge
           const timer = setTimeout(() => {
             setShowGuide(true);
+            // Marquer comme vu pour toujours (une seule fois dans la vie)
             localStorage.setItem(welcomeKey, 'true');
-          }, 1500);
-          
-          return () => clearTimeout(timer);
-        }
-        
-        // Vérifier si l'utilisateur a été marqué pour voir le guide à nouveau
-        // (par exemple après une approbation par l'admin)
-        const shouldShowAgain = localStorage.getItem(`fc_show_welcome_${user.id}`);
-        if (shouldShowAgain === 'true') {
-          const timer = setTimeout(() => {
-            setShowGuide(true);
-            localStorage.setItem(welcomeKey, 'true'); // Marquer comme vu
-            localStorage.removeItem(`fc_show_welcome_${user.id}`); // Retirer le flag
           }, 1500);
           
           return () => clearTimeout(timer);

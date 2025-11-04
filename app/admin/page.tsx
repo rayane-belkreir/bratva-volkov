@@ -100,15 +100,8 @@ export default function AdminPage() {
             type: "success",
           });
           
-          // Marquer que l'utilisateur doit voir le guide de bienvenue
-          const allUsers = await getAllUsers();
-          const approvedUser = allUsers.find(u => u.id === userId);
-          if (approvedUser) {
-            // Marquer pour afficher le guide au prochain chargement
-            localStorage.setItem(`fc_show_welcome_${userId}`, 'true');
-            // Réinitialiser le flag "a vu le guide" pour forcer l'affichage
-            localStorage.removeItem(`fc_welcome_${userId}`);
-          }
+          // Le guide s'affichera automatiquement si l'utilisateur ne l'a jamais vu
+          // (via localStorage dans WelcomeGuideProvider)
         }
       } catch (error) {
         alert({
