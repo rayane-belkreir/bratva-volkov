@@ -474,8 +474,15 @@ export default function AdminPage() {
     }
 
     try {
-      console.log('📝 Updating member:', editingMember.id, editingMember);
-      const result = await updateUser(String(editingMember.id), { 
+      const memberIdStr = String(editingMember.id).trim();
+      
+      // Vérifier que l'ID est un string MongoDB valide
+      if (memberIdStr.length !== 24 || !/^[0-9a-fA-F]{24}$/.test(memberIdStr)) {
+        throw new Error("ID de membre invalide : format MongoDB requis (24 caractères hex)");
+      }
+      
+      console.log('📝 Updating member:', memberIdStr, editingMember);
+      const result = await updateUser(memberIdStr, { 
         role: newMember.role as "Bratan" | "Soldat" | "Avtoritet" | "Vor" | "Sovetnik" | "Pervyi" | "Pakhan" | "Admin", 
         reputation: newMember.reputation, 
         money: newMember.money 
