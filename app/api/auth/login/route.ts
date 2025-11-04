@@ -24,9 +24,24 @@ export async function POST(request: NextRequest) {
 
     const { password: _, ...userWithoutPassword } = user.toObject();
     return NextResponse.json(userWithoutPassword);
-  } catch (error) {
+  } catch (error: any) {
     console.error('Error logging in:', error);
-    return NextResponse.json({ error: 'Error logging in' }, { status: 500 });
+    
+    // Vérifier si c'est une erreur de connexion MongoDB
+    if (error.message?.includes('MongoDB') || error.message?.includes('connection')) {
+      return NextResponse.json(
+        { 
+          error: 'Erreur de connexion à la base de données. Vérifiez la configuration MongoDB.',
+          details: process.env.NODE_ENV === 'development' ? error.message : undefined
+        },
+        { status: 500 }
+      );
+    }
+    
+    return NextResponse.json(
+      { error: 'Erreur lors de la connexion', details: process.env.NODE_ENV === 'development' ? error.message : undefined },
+      { status: 500 }
+    );
   }
 }
 

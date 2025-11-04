@@ -27,21 +27,31 @@ async function connectDB(): Promise<typeof mongoose> {
     return cached.conn;
   }
 
+  if (!MONGODB_URI) {
+    throw new Error('MONGODB_URI is not defined. Please check your environment variables.');
+  }
+
   if (!cached.promise) {
     const opts = {
       bufferCommands: false,
     };
 
     cached.promise = mongoose.connect(MONGODB_URI, opts).then((mongoose) => {
+      console.log('✅ MongoDB connected successfully');
       return mongoose;
+    }).catch((error) => {
+      console.error('❌ MongoDB connection error:', error.message);
+      cached.promise = null;
+      throw error;
     });
   }
 
   try {
     cached.conn = await cached.promise;
-  } catch (e) {
+  } catch (e: any) {
     cached.promise = null;
-    throw e;
+    console.error('❌ MongoDB connection failed:', e.message);
+    throw new Error(`MongoDB connection failed: ${e.message}`);
   }
 
   return cached.conn;
