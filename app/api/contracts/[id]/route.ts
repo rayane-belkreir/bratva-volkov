@@ -27,6 +27,12 @@ export async function PUT(request: NextRequest, context: RouteContext) {
   try {
     await connectDB();
     const { id } = await context.params;
+    
+    if (!id || id === 'undefined') {
+      console.error('❌ API: Invalid contract ID:', id);
+      return NextResponse.json({ error: 'Invalid contract ID' }, { status: 400 });
+    }
+    
     const body = await request.json();
 
     console.log('🔄 API: Updating contract', id, 'with:', body);
@@ -59,6 +65,12 @@ export async function DELETE(request: NextRequest, context: RouteContext) {
   try {
     await connectDB();
     const { id } = await context.params;
+    
+    if (!id || id === 'undefined') {
+      console.error('❌ API: Invalid contract ID:', id);
+      return NextResponse.json({ error: 'Invalid contract ID' }, { status: 400 });
+    }
+    
     console.log('🔄 API: Deleting contract', id);
     
     const contract = await Contract.findByIdAndDelete(id);
