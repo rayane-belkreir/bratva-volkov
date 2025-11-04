@@ -46,7 +46,7 @@ export function ApplicationStatusPopup({ isOpen, onClose }: ApplicationStatusPop
                 isRestriction={isRejected || isPending} 
                 className={`aged-paper border-2 shadow-[0_0_50px_rgba(201,169,97,0.5)] ${
                   isRejected || isPending 
-                    ? "border-blood-red/60 shadow-[0_0_50px_rgba(139,0,0,0.8)]" 
+                    ? "border-patina-gold/60 shadow-[0_0_50px_rgba(201,169,97,0.8)]" 
                     : "border-patina-gold/40"
                 }`}
               >
@@ -67,11 +67,11 @@ export function ApplicationStatusPopup({ isOpen, onClose }: ApplicationStatusPop
                     <div className={`w-20 h-20 rounded-full border-4 flex items-center justify-center ${
                       isPending ? 'bg-patina-gold/20 border-patina-gold/60' :
                       isApproved ? 'bg-patina-gold/20 border-patina-gold/60' :
-                      'bg-blood-red/20 border-blood-red/60'
+                      'bg-patina-gold/20 border-patina-gold/60'
                     }`}>
                       {isPending && <Clock className="w-10 h-10 text-patina-gold" />}
                       {isApproved && <CheckCircle className="w-10 h-10 text-patina-gold" />}
-                      {isRejected && <XCircle className="w-10 h-10 text-blood-red" />}
+                      {isRejected && <XCircle className="w-10 h-10 text-patina-gold" />}
                     </div>
                     {isPending && (
                       <motion.div
@@ -87,7 +87,7 @@ export function ApplicationStatusPopup({ isOpen, onClose }: ApplicationStatusPop
                 <h2 className={`text-3xl font-bold text-center mb-4 vintage-text ${
                   isPending ? 'text-patina-gold' :
                   isApproved ? 'text-patina-gold' :
-                  'text-blood-red'
+                  'text-patina-gold'
                 }`}>
                   {isPending && "Candidature en cours d'examen"}
                   {isApproved && "Candidature acceptée"}
@@ -127,17 +127,17 @@ export function ApplicationStatusPopup({ isOpen, onClose }: ApplicationStatusPop
                   <div className={`flex items-center gap-2 px-4 py-2 rounded-lg border-2 ${
                     isPending ? 'bg-patina-gold/20 border-patina-gold/40' :
                     isApproved ? 'bg-patina-gold/20 border-patina-gold/40' :
-                    'bg-blood-red/20 border-blood-red/40'
+                    'bg-patina-gold/20 border-patina-gold/40'
                   }`}>
                     <FileText className={`w-5 h-5 ${
                       isPending ? 'text-patina-gold' :
                       isApproved ? 'text-patina-gold' :
-                      'text-blood-red'
+                      'text-patina-gold'
                     }`} />
                     <span className={`text-sm font-bold uppercase tracking-wider ${
                       isPending ? 'text-patina-gold' :
                       isApproved ? 'text-patina-gold' :
-                      'text-blood-red'
+                      'text-patina-gold'
                     }`}>
                       {isPending && "En attente"}
                       {isApproved && "Approuvé"}

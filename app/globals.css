@@ -113,17 +113,17 @@
       inset 0 1px 0 rgba(139, 0, 0, 0.1);
   }
 
-  /* Style pour les restrictions (rouge au lieu de jaune) */
+  /* Style pour les restrictions (jaune) */
   .mafia-card.restriction-card {
-    @apply border-blood-red/30;
+    @apply border-patina-gold/30;
   }
 
   .mafia-card.restriction-card:hover {
-    @apply border-blood-red/60 !important;
+    @apply border-patina-gold/60 !important;
     box-shadow: 
       0 8px 32px rgba(0, 0, 0, 0.7),
-      0 0 20px rgba(139, 0, 0, 0.3),
-      inset 0 1px 0 rgba(139, 0, 0, 0.1) !important;
+      0 0 20px rgba(201, 169, 97, 0.3),
+      inset 0 1px 0 rgba(201, 169, 97, 0.1) !important;
   }
 
   /* Effet de loupe au hover */

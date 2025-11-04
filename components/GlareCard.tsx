@@ -25,15 +25,10 @@ export function GlareCard({ children, className, href, isParrain = false, isRest
       whileHover={href ? { scale: 1.02, y: -2 } : undefined}
       transition={{ duration: 0.3, ease: "easeOut" }}
     >
-      {/* Glare Effect - Rouge pour Parrain et Restrictions, Jaune pour les autres */}
+      {/* Glare Effect - Jaune pour tous */}
       <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none">
         <div 
-          className={cn(
-            "absolute inset-0 bg-gradient-to-r from-transparent to-transparent -skew-x-12 translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-1000",
-            isParrain || isRestriction
-              ? "via-blood-red/20" 
-              : "via-patina-gold/20"
-          )} 
+          className="absolute inset-0 bg-gradient-to-r from-transparent via-patina-gold/20 to-transparent -skew-x-12 translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-1000"
         />
       </div>
 
