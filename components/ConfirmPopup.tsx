@@ -88,14 +88,22 @@ export function ConfirmPopup({
             <div className="relative max-w-md w-full">
               <GlareCard 
                 isRestriction={type === "danger"} 
-                className={`aged-paper border-4 ${config.borderColor} shadow-[0_0_50px_rgba(139,0,0,0.8)] bg-gradient-to-br from-charcoal-black via-anthracite to-charcoal-black`}
+                className={`aged-paper border-4 ${config.borderColor} ${
+                  type === "danger"
+                    ? "shadow-[0_0_50px_rgba(139,0,0,0.8)]"
+                    : "shadow-[0_0_50px_rgba(201,169,97,0.8)]"
+                } bg-gradient-to-br from-charcoal-black via-anthracite to-charcoal-black`}
               >
                 {/* Bouton de fermeture */}
                 <button
                   onClick={onClose}
-                  className="absolute top-4 right-4 p-2 hover:bg-blood-red/10 rounded transition-colors"
+                  className={`absolute top-4 right-4 p-2 rounded transition-colors ${
+                    type === "danger" 
+                      ? "hover:bg-blood-red/10" 
+                      : "hover:bg-patina-gold/10"
+                  }`}
                 >
-                  <X className="w-5 h-5 text-blood-red" />
+                  <X className={`w-5 h-5 ${config.color}`} />
                 </button>
 
                 {/* Icône centrale */}
@@ -126,7 +134,11 @@ export function ConfirmPopup({
                 </div>
 
                 {/* Titre */}
-                <h2 className={`text-3xl font-bold text-center mb-4 vintage-text ${config.color} drop-shadow-[0_0_10px_rgba(139,0,0,0.8)]`}>
+                <h2 className={`text-3xl font-bold text-center mb-4 vintage-text ${config.color} ${
+                  type === "danger" 
+                    ? "drop-shadow-[0_0_10px_rgba(139,0,0,0.8)]" 
+                    : "drop-shadow-[0_0_10px_rgba(201,169,97,0.8)]"
+                }`}>
                   {title}
                 </h2>
 
@@ -137,17 +149,21 @@ export function ConfirmPopup({
 
                 {/* Boutons d'action */}
                 <div className="flex flex-col sm:flex-row gap-3">
-                  <button
-                    onClick={onClose}
-                    className="flex-1 px-6 py-3 bg-transparent border-2 border-patina-gold/40 text-patina-gold hover:bg-patina-gold/10 hover:border-patina-gold/60 transition-colors font-bold uppercase tracking-wider text-center rounded-lg"
-                  >
-                    {cancelText}
-                  </button>
+                  {cancelText && (
+                    <button
+                      onClick={onClose}
+                      className={`flex-1 px-6 py-3 bg-transparent border-2 transition-colors font-bold uppercase tracking-wider text-center rounded-lg ${
+                        type === "danger"
+                          ? "border-blood-red/40 text-blood-red hover:bg-blood-red/10 hover:border-blood-red/60"
+                          : "border-patina-gold/40 text-patina-gold hover:bg-patina-gold/10 hover:border-patina-gold/60"
+                      }`}
+                    >
+                      {cancelText}
+                    </button>
+                  )}
                   <button
                     onClick={handleConfirm}
-                    className={`flex-1 px-6 py-3 ${config.buttonColor} transition-colors font-bold uppercase tracking-wider text-center rounded-lg border-2 ${
-                      type === "danger" ? "border-blood-red/60" : "border-transparent"
-                    }`}
+                    className={`flex-1 px-6 py-3 ${config.buttonColor} transition-colors font-bold uppercase tracking-wider text-center rounded-lg border-2 ${config.borderColor}`}
                   >
                     {confirmText}
                   </button>

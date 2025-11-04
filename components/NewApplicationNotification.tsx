@@ -74,16 +74,16 @@ export function NewApplicationNotification({
                 </div>
                 <button
                   onClick={onClose}
-                  className="p-1 hover:bg-blood-red/10 rounded transition-colors flex-shrink-0"
+                  className="p-1 hover:bg-patina-gold/10 rounded transition-colors flex-shrink-0"
                 >
-                  <X className="w-5 h-5 text-blood-red" />
+                  <X className="w-5 h-5 text-patina-gold" />
                 </button>
               </div>
 
               <div className="flex items-center gap-2 mb-4 p-3 bg-charcoal-black/50 rounded-lg border border-patina-gold/20">
                 <Clock className="w-4 h-4 text-patina-gold animate-pulse" />
                 <span className="text-xs text-vintage-cream/60">
-                  La Mafia attend votre décision
+                  La Famille attend votre décision
                 </span>
               </div>
 

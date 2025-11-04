@@ -130,9 +130,9 @@ export function WelcomeGuide({ isOpen, onClose }: WelcomeGuideProps) {
                 {/* Bouton de fermeture */}
                 <button
                   onClick={onClose}
-                  className="absolute top-4 right-4 p-2 hover:bg-blood-red/10 rounded transition-colors"
+                  className="absolute top-4 right-4 p-2 hover:bg-patina-gold/10 rounded transition-colors"
                 >
-                  <X className="w-5 h-5 text-blood-red" />
+                  <X className="w-5 h-5 text-patina-gold" />
                 </button>
 
                 {/* Guide des canaux */}

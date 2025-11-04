@@ -102,10 +102,10 @@ export function ApplicationStatusPopup({ isOpen, onClose }: ApplicationStatusPop
                         <Eye className="w-8 h-8 text-patina-gold animate-pulse" />
                       </div>
                       <p className="text-vintage-cream/90 text-lg mb-2 font-bold">
-                        La Mafia lit votre candidature
+                        La Famille lit votre candidature
                       </p>
                       <p className="text-vintage-cream/70 text-sm leading-relaxed">
-                        Votre dossier est en cours d'examen par les membres de l'organisation. 
+                        Votre dossier est en cours d'examen par les membres de la famille. 
                         Vous recevrez une réponse sous peu. En attendant, vous avez un accès visiteur limité.
                       </p>
                     </>
