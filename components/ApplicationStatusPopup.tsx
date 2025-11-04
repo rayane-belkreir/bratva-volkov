@@ -112,7 +112,7 @@ export function ApplicationStatusPopup({ isOpen, onClose }: ApplicationStatusPop
                   )}
                   {isApproved && (
                     <p className="text-vintage-cream/90 text-lg leading-relaxed">
-                      Félicitations ! Votre candidature a été acceptée. Vous avez maintenant accès complet à l'organisation.
+                      Félicitations ! Votre candidature a été acceptée. Vous avez maintenant accès complet à la famille.
                     </p>
                   )}
                   {isRejected && (
