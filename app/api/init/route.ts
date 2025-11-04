@@ -155,14 +155,20 @@ export async function POST(request: Request) {
       }
     }
 
+    // Si rien n'a été créé, c'est que tout existe déjà
+    const allExist = createdUsers.length === 0 && createdContracts.length === 0 && createdArticles.length === 0;
+    
     return NextResponse.json({
       success: true,
-      message: 'Données initialisées avec succès',
+      message: allExist 
+        ? 'Données déjà initialisées' 
+        : 'Données initialisées avec succès',
       created: {
         users: createdUsers,
         contracts: createdContracts,
         articles: createdArticles,
       },
+      alreadyInitialized: allExist,
     });
   } catch (error: any) {
     console.error('Error initializing data:', error);

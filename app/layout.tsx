@@ -6,6 +6,7 @@ import { Footer } from "@/components/Footer";
 import { AuthProvider } from "@/contexts/AuthContext";
 import { PendingStatusBanner } from "@/components/PendingStatusBanner";
 import { WelcomeGuideProvider } from "@/components/WelcomeGuideProvider";
+import { DatabaseInitializer } from "@/components/DatabaseInitializer";
 
 const cinzel = Cinzel({
   subsets: ["latin"],
@@ -32,6 +33,7 @@ export default function RootLayout({
   return (
     <html lang="fr" className={`${cinzel.variable} ${inter.variable}`}>
       <body className="font-cinzel flex flex-col min-h-screen">
+        <DatabaseInitializer />
         <AuthProvider>
           <WelcomeGuideProvider>
             <Header />
