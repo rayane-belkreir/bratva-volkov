@@ -1,4 +1,4 @@
-# Identifiants Admin - French Connection RP
+# Identifiants Admin - Bratva Volkov
 
 ## 🔐 Identifiants de connexion
 
@@ -10,15 +10,15 @@
 ### Autres comptes disponibles
 - **Username:** `antoine`
 - **Password:** `admin123`
-- **Role:** Parrain
+- **Role:** Pakhan
 
 - **Username:** `elise`
 - **Password:** `admin123`
-- **Role:** Consigliere
+- **Role:** Sovetnik
 
 - **Username:** `marc`
 - **Password:** `admin123`
-- **Role:** Capo
+- **Role:** Avtoritet
 
 ---
 
