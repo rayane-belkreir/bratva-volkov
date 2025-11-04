@@ -116,14 +116,14 @@ export function WelcomeGuide({ isOpen, onClose }: WelcomeGuideProps) {
                     </div>
                   </motion.div>
                   <h2 className="text-4xl font-bold text-patina-gold mb-4 vintage-text drop-shadow-[0_0_10px_rgba(201,169,97,0.8)]">
-                    Bienvenue dans la French Connection
+                    Bienvenue dans la Bratva Volkov
                   </h2>
                   <p className="text-xl text-vintage-cream/90 font-bold mb-2">
                     La Mafia vous a accepté
                   </p>
                   <p className="text-vintage-cream/70 text-sm leading-relaxed max-w-2xl mx-auto">
-                    Votre candidature a été approuvée. L'organisation compte sur vous pour maintenir la loyauté, 
-                    le pouvoir et le silence. Vous avez maintenant accès complet à toutes les fonctionnalités.
+                    Votre candidature a été approuvée. La famille compte sur vous pour maintenir la loyauté, 
+                    l'honneur et le respect. Vous avez maintenant accès complet à toutes les fonctionnalités.
                   </p>
                 </div>
 

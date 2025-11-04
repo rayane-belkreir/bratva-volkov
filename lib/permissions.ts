@@ -131,12 +131,12 @@ export function hasPermission(userRole: string, permission: Permission): boolean
  * Vérifie si un utilisateur peut modifier un autre utilisateur (basé sur la hiérarchie)
  */
 export function canModifyUser(userRole: string, targetUserRole: string): boolean {
-  // Admin peut modifier tout le monde sauf un autre Admin
+  // Admin peut modifier tout le monde (y compris un autre Admin)
   if (userRole === "Admin") {
-    return targetUserRole !== "Admin";
+    return true;
   }
 
-  // Personne ne peut modifier un Admin
+  // Personne ne peut modifier un Admin sauf un autre Admin
   if (targetUserRole === "Admin") {
     return false;
   }
@@ -155,12 +155,12 @@ export function canModifyUser(userRole: string, targetUserRole: string): boolean
  * Vérifie si un utilisateur peut supprimer un autre utilisateur (basé sur la hiérarchie)
  */
 export function canRemoveUser(userRole: string, targetUserRole: string): boolean {
-  // Admin peut supprimer tout le monde sauf un autre Admin
+  // Admin peut supprimer tout le monde (y compris un autre Admin)
   if (userRole === "Admin") {
-    return targetUserRole !== "Admin";
+    return true;
   }
 
-  // Personne ne peut supprimer un Admin
+  // Personne ne peut supprimer un Admin sauf un autre Admin
   if (targetUserRole === "Admin") {
     return false;
   }
@@ -186,11 +186,7 @@ export function canManageRole(userRole: string, targetUserRole: string, newRole:
     return false;
   }
 
-  // Admin ne peut pas modifier le rôle d'un autre Admin
-  if (targetUserRole === "Admin") {
-    return false;
-  }
-
+  // Admin peut modifier le rôle de tout le monde (y compris un autre Admin)
   return true;
 }
 
