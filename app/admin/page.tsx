@@ -297,8 +297,25 @@ export default function AdminPage() {
   const handleDeleteMember = async (userId: string) => {
     if (!user) return;
     
+    if (!userId) {
+      alert({
+        title: "Erreur",
+        message: "L'ID du membre n'est pas défini",
+        type: "danger",
+      });
+      console.error('❌ userId is undefined');
+      return;
+    }
+    
     const memberToRemove = members.find(m => m.id === userId);
-    if (!memberToRemove) return;
+    if (!memberToRemove) {
+      alert({
+        title: "Erreur",
+        message: "Membre non trouvé",
+        type: "danger",
+      });
+      return;
+    }
 
     // Vérifier les permissions strictes
     if (!canRemoveUser(user.role, memberToRemove.role)) {
@@ -318,7 +335,8 @@ export default function AdminPage() {
       cancelText: "Annuler",
     }, async () => {
       try {
-        const success = await deleteUser(userId);
+        console.log('📝 Deleting member:', userId);
+        const success = await deleteUser(String(userId));
         
         if (!success) {
           throw new Error("La suppression a échoué");
@@ -368,7 +386,25 @@ export default function AdminPage() {
   };
 
   const handleUpdateMember = async () => {
-    if (!editingMember || !user) return;
+    if (!editingMember || !user) {
+      alert({
+        title: "Erreur",
+        message: "Aucun membre sélectionné pour modification",
+        type: "danger",
+      });
+      return;
+    }
+
+    // Vérifier que l'ID est défini
+    if (!editingMember.id) {
+      alert({
+        title: "Erreur",
+        message: "L'ID du membre n'est pas défini",
+        type: "danger",
+      });
+      console.error('❌ editingMember.id is undefined:', editingMember);
+      return;
+    }
 
     // Vérifier les permissions pour modifier le rôle
     if (editingMember.role !== newMember.role) {
@@ -393,7 +429,8 @@ export default function AdminPage() {
     }
 
     try {
-      const result = await updateUser(editingMember.id, { 
+      console.log('📝 Updating member:', editingMember.id, editingMember);
+      const result = await updateUser(String(editingMember.id), { 
         role: newMember.role as "Bratan" | "Soldat" | "Avtoritet" | "Vor" | "Sovetnik" | "Pervyi" | "Pakhan" | "Admin", 
         reputation: newMember.reputation, 
         money: newMember.money 
@@ -447,7 +484,12 @@ export default function AdminPage() {
           });
           return;
         }
-        const result = await updateContract(editingContract.id, {
+        if (!editingContract || !editingContract.id) {
+          throw new Error("Aucun contrat sélectionné pour modification");
+        }
+        
+        console.log('📝 Updating contract:', editingContract.id);
+        const result = await updateContract(String(editingContract.id), {
           type: newMission.type,
           title: newMission.title,
           description: newMission.description,
@@ -527,6 +569,16 @@ export default function AdminPage() {
   const handleDeleteMission = async (missionId: number | string) => {
     if (!user) return;
 
+    if (!missionId) {
+      alert({
+        title: "Erreur",
+        message: "L'ID de la mission n'est pas défini",
+        type: "danger",
+      });
+      console.error('❌ missionId is undefined');
+      return;
+    }
+
     if (!hasPermission(user.role, "delete_contracts")) {
       alert({
         title: "Permission refusée",
@@ -544,7 +596,8 @@ export default function AdminPage() {
       cancelText: "Annuler",
     }, async () => {
       try {
-        const success = await deleteContract(missionId);
+        console.log('📝 Deleting mission:', missionId);
+        const success = await deleteContract(String(missionId));
         
         if (!success) {
           throw new Error("La suppression a échoué");
@@ -593,7 +646,12 @@ export default function AdminPage() {
 
     try {
       const newReputation = (selectedUserForReputation.reputation || 0) + reputationChange;
-      const result = await updateUser(selectedUserForReputation.id, { reputation: Math.max(0, newReputation) });
+      if (!selectedUserForReputation.id) {
+        throw new Error("L'ID de l'utilisateur n'est pas défini");
+      }
+      
+      console.log('📝 Updating reputation for user:', selectedUserForReputation.id);
+      const result = await updateUser(String(selectedUserForReputation.id), { reputation: Math.max(0, newReputation) });
       
       if (!result) {
         throw new Error("La mise à jour de la réputation a échoué");
@@ -890,6 +948,14 @@ export default function AdminPage() {
                       {user && canRemoveUser(user.role, member.role) && (
                         <button 
                           onClick={() => {
+                            if (!member.id) {
+                              alert({
+                                title: "Erreur",
+                                message: "L'ID du membre n'est pas défini",
+                                type: "danger",
+                              });
+                              return;
+                            }
                             handleDeleteMember(member.id);
                           }}
                           className="p-2 hover:bg-blood-red/10 rounded transition-colors"
@@ -1067,7 +1133,17 @@ export default function AdminPage() {
                         Modifier
                       </button>
                       <button 
-                        onClick={() => handleDeleteMission(mission.id)}
+                        onClick={() => {
+                          if (!mission.id) {
+                            alert({
+                              title: "Erreur",
+                              message: "L'ID de la mission n'est pas défini",
+                              type: "danger",
+                            });
+                            return;
+                          }
+                          handleDeleteMission(mission.id);
+                        }}
                         className="px-2 md:px-3 py-1 bg-transparent border border-blood-red/40 text-blood-red hover:bg-blood-red/10 transition-colors text-xs font-bold uppercase"
                       >
                         Supprimer
