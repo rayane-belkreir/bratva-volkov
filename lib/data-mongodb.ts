@@ -122,7 +122,11 @@ export async function addMessage(message: Omit<ForumMessage, 'id' | 'time'>): Pr
 
 export async function getArticles(): Promise<Article[]> {
   try {
-    const response = await fetch(`${API_BASE}/articles`);
+    // Utiliser cache et revalidate pour améliorer les performances
+    const response = await fetch(`${API_BASE}/articles`, {
+      cache: 'force-cache',
+      next: { revalidate: 60 }, // Revalider toutes les 60 secondes
+    });
     if (!response.ok) {
       return [];
     }
