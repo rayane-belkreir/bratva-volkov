@@ -3,7 +3,7 @@ import type { Metadata } from "next";
 
 export const metadata: Metadata = generatePageMetadata(
   "Dossiers",
-  "Archives et chroniques de l'organisation. Les événements qui ont façonné notre histoire."
+  "Archives et chroniques de la famille. Les événements qui ont façonné notre histoire."
 );
 
 export default function DossiersLayout({
@@ -13,4 +13,5 @@ export default function DossiersLayout({
 }) {
   return children;
 }
+
 

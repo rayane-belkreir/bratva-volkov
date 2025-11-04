@@ -1,0 +1,33 @@
+# VARIABLES D'ENVIRONNEMENT POUR VERCEL
+# Copiez-collez ces variables dans Vercel → Settings → Environment Variables
+
+# ==========================================
+# VARIABLE 1 : MONGODB_URI (OBLIGATOIRE)
+# ==========================================
+Name: MONGODB_URI
+Value: mongodb+srv://rayanebelkreir_db_user:UHXqQt4Lk5eIHT8F@cluster0.vpfynqf.mongodb.net/frenchconnection?retryWrites=true&w=majority
+Environments: ☑ Production, ☑ Preview, ☑ Development
+
+# ==========================================
+# VARIABLE 2 : RECIPIENT_EMAIL (OBLIGATOIRE)
+# ==========================================
+Name: RECIPIENT_EMAIL
+Value: radiachakir1982@gmail.com
+Environments: ☑ Production, ☑ Preview, ☑ Development
+
+# ==========================================
+# VARIABLE 3 : RESEND_API_KEY (OPTIONNEL)
+# ==========================================
+# Si vous avez une clé Resend, ajoutez-la ici
+# Name: RESEND_API_KEY
+# Value: re_xxxxxxxxxxxxxxxxxxxxx
+# Environments: ☑ Production, ☑ Preview, ☑ Development
+
+# ==========================================
+# VARIABLE 4 : NEXT_PUBLIC_SITE_URL (OPTIONNEL)
+# ==========================================
+# À remplir après le déploiement avec l'URL Vercel
+# Name: NEXT_PUBLIC_SITE_URL
+# Value: https://votre-projet.vercel.app
+# Environments: ☑ Production, ☑ Preview, ☑ Development
+

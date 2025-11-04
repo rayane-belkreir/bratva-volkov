@@ -1,149 +1,147 @@
-import dynamic from "next/dynamic";
-import { Suspense } from "react";
-import { SectionHeader } from "@/components/SectionHeader";
-import fs from "fs";
-import path from "path";
-import matter from "gray-matter";
-import { generatePageMetadata } from "@/lib/seo";
+"use client";
 
-// Charger les composants dynamiquement (ssr: false retiré car c'est une Server Component)
-const Timeline = dynamic(() => import("@/components/Timeline").then(mod => ({ default: mod.Timeline })), {
-  loading: () => (
-    <div className="text-center text-cream-white/50 py-8">
-      <div className="inline-block h-6 w-6 animate-spin rounded-full border-3 border-solid border-gold border-r-transparent"></div>
-    </div>
-  ),
-});
-
-const PostsGrid = dynamic(() => import("@/components/PostsGrid").then(mod => ({ default: mod.PostsGrid })), {
-  loading: () => (
-    <div className="text-center text-cream-white/50 py-12">
-      <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-gold border-r-transparent"></div>
-      <p className="mt-4">Chargement des articles...</p>
-    </div>
-  ),
-});
-
-// Timeline events (could be extracted to a JSON file)
-const timelineEvents = [
-  {
-    date: "Janvier 2024",
-    title: "Opération Marseillaise",
-    description:
-      "Une opération stratégique qui a consolidé notre position dans le sud du territoire.",
-  },
-  {
-    date: "Février 2024",
-    title: "Accords de Palaiseau",
-    description:
-      "Un tournant diplomatique majeur qui a transformé le paysage territorial.",
-  },
-  {
-    date: "Mars 2024",
-    title: "Le Banquet du Silence",
-    description:
-      "Une cérémonie traditionnelle qui a renforcé les liens au sein de l'organisation.",
-  },
-];
-
-function getPosts() {
-  try {
-    const postsDirectory = path.join(process.cwd(), "content", "posts");
-    
-    if (!fs.existsSync(postsDirectory)) {
-      console.warn("Posts directory not found:", postsDirectory);
-      return [];
-    }
-
-    const filenames = fs.readdirSync(postsDirectory);
-
-    if (filenames.length === 0) {
-      return [];
-    }
-
-    const posts = filenames
-      .filter((name) => name.endsWith(".mdx"))
-      .map((filename) => {
-        try {
-          const filePath = path.join(postsDirectory, filename);
-          
-          if (!fs.existsSync(filePath)) {
-            console.warn("Post file not found:", filePath);
-            return null;
-          }
-
-          const fileContents = fs.readFileSync(filePath, "utf8");
-          const { data } = matter(fileContents);
-
-          return {
-            slug: filename.replace(".mdx", ""),
-            title: data.title || filename,
-            date: data.date || new Date().toISOString(),
-            excerpt: data.excerpt || "",
-          };
-        } catch (error) {
-          console.error(`Error reading post ${filename}:`, error);
-          return null;
-        }
-      })
-      .filter((post): post is NonNullable<typeof post> => post !== null);
-
-    return posts.sort(
-      (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
-    );
-  } catch (error) {
-    console.error("Error reading posts:", error);
-    return [];
-  }
-}
-
-export const metadata = generatePageMetadata(
-  "Dossiers",
-  "Archives et chroniques de l'organisation. Les événements qui ont façonné notre histoire."
-);
+import { useState, useEffect } from "react";
+import { motion } from "framer-motion";
+import { GlareCard } from "@/components/GlareCard";
+import { FileText, Calendar, User, Lock, Unlock } from "lucide-react";
+import { getArticles } from "@/lib/data";
+import { Article } from "@/lib/types";
+import { useAuth } from "@/contexts/AuthContext";
+import { getTierLevel, canAccessLevel } from "@/lib/hierarchy";
+import Link from "next/link";
 
 export default function DossiersPage() {
-  const posts = getPosts();
+  const { user, isAuthenticated } = useAuth();
+  const [articles, setArticles] = useState<Article[]>([]);
+
+  useEffect(() => {
+    const loadArticles = async () => {
+      const loadedArticles = await getArticles();
+      setArticles(loadedArticles);
+    };
+    loadArticles();
+  }, []);
+
+  // Formater la date pour l'affichage (ne pas dépasser 1990)
+  const formatArticleDate = (dateString: string): string => {
+    try {
+      const date = new Date(dateString);
+      const year = date.getFullYear();
+      // S'assurer que l'année ne dépasse pas 1990
+      if (year > 1990) {
+        // Si la date dépasse 1990, on la remplace par 1990
+        return dateString.split('-').map((part, index) => {
+          if (index === 0) return '1990';
+          return part;
+        }).join('-');
+      }
+      return new Date(dateString).toLocaleDateString('fr-FR');
+    } catch {
+      return dateString;
+    }
+  };
+
+  const canAccessArticle = (article: Article) => {
+    if (!article.locked) return true;
+    if (!isAuthenticated || !user) return false;
+    
+    // Utiliser la hiérarchie pour vérifier l'accès
+    const userLevel = getTierLevel(user.role);
+    const requiredLevel = article.requiredRank ? getTierLevel(article.requiredRank) : 0;
+    
+    return canAccessLevel(userLevel, requiredLevel);
+  };
 
   return (
-    <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-16">
-      <SectionHeader
-        title="Dossiers"
-        subtitle="Archives et chroniques. Les événements qui ont marqué notre organisation."
-      />
-
-      {/* Timeline */}
-      <section className="mb-16">
-        <h2 className="text-2xl font-cinzel font-bold text-gold mb-8">
-          Chronologie
-        </h2>
-        <Suspense
-          fallback={
-            <div className="text-center text-cream-white/50 py-8">
-              <div className="inline-block h-6 w-6 animate-spin rounded-full border-3 border-solid border-gold border-r-transparent"></div>
-            </div>
-          }
+    <div className="min-h-screen bg-charcoal-black aged-paper">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="text-center mb-16"
         >
-          <Timeline events={timelineEvents} />
-        </Suspense>
-      </section>
+          <h1 className="text-5xl md:text-6xl font-bold vintage-text text-patina-gold mb-4">
+            Dossiers
+          </h1>
+          <p className="text-xl text-vintage-cream/80 max-w-2xl mx-auto">
+            Archives et chroniques de la famille. Les événements qui ont façonné notre histoire.
+          </p>
+        </motion.div>
 
-      {/* Posts */}
-      <section>
-        <h2 className="text-2xl font-cinzel font-bold text-gold mb-8">
-          Archives
-        </h2>
-        <Suspense
-          fallback={
-            <div className="text-center text-cream-white/50 py-12">
-              <div className="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-gold border-r-transparent"></div>
-              <p className="mt-4">Chargement des articles...</p>
-            </div>
-          }
-        >
-          <PostsGrid posts={posts} />
-        </Suspense>
-      </section>
+        <div className="max-w-4xl mx-auto">
+          <div className="space-y-6">
+            {articles.map((article, index) => {
+              const accessible = canAccessArticle(article);
+              return (
+                <motion.div
+                  key={article.id}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: index * 0.1 }}
+                >
+                  <GlareCard 
+                    className={`aged-paper ${!accessible ? "opacity-60" : ""}`}
+                    href={accessible ? `/dossiers/${article.id}` : undefined}
+                  >
+                    <div className="flex items-start gap-4">
+                      <div className={`w-12 h-12 bg-patina-gold/20 rounded-full flex items-center justify-center border-2 border-patina-gold/40 flex-shrink-0 ${!accessible ? "opacity-50" : ""}`}>
+                        {article.locked ? (
+                          <Lock className="w-6 h-6 text-blood-red" />
+                        ) : (
+                          <Unlock className="w-6 h-6 text-patina-gold" />
+                        )}
+                      </div>
+                      <div className="flex-1">
+                        <div className="flex items-center justify-between mb-2">
+                          <h3 className="text-2xl font-bold text-patina-gold vintage-text">
+                            {article.title}
+                          </h3>
+                          {article.locked && !accessible && (
+                            <span className="px-3 py-1 bg-blood-red/20 border border-blood-red/40 text-blood-red text-xs font-bold uppercase">
+                              Accès Restreint
+                            </span>
+                          )}
+                        </div>
+                        <div className="flex items-center gap-4 text-sm text-vintage-cream/70 mb-3">
+                          <div className="flex items-center gap-2">
+                            <Calendar className="w-4 h-4" />
+                            <span>{formatArticleDate(article.date)}</span>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <User className="w-4 h-4" />
+                            <span>{article.author}</span>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <FileText className="w-4 h-4" />
+                            <span className="uppercase tracking-wider">{article.category}</span>
+                          </div>
+                        </div>
+                        <p className="text-vintage-cream/80 leading-relaxed">
+                          {article.content.substring(0, 150)}...
+                        </p>
+                        {accessible && (
+                          <Link
+                            href={`/dossiers/${article.id}`}
+                            className="inline-flex items-center gap-2 mt-4 text-patina-gold hover:text-patina-gold-light transition-colors text-sm font-bold uppercase tracking-wider"
+                          >
+                            Lire la suite →
+                          </Link>
+                        )}
+                        {!accessible && (
+                          <p className="text-blood-red/70 text-sm mt-4 italic">
+                            Vous devez être au rang {article.requiredRank} ou supérieur pour accéder à ce dossier.
+                          </p>
+                        )}
+                      </div>
+                    </div>
+                  </GlareCard>
+                </motion.div>
+              );
+            })}
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

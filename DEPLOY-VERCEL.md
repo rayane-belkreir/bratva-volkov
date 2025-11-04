@@ -1,117 +1,207 @@
-# 🚀 Déploiement sur Vercel — Guide Simplifié
+# 🚀 DÉPLOIEMENT BRATVA VOLKOV SUR VERCEL
 
-## ✅ Votre projet est prêt !
+## ✅ Votre projet est PRÊT !
 
-Tout est configuré pour être déployé. Suivez ces étapes :
-
-## 📋 Étapes (5 minutes)
-
-### 1️⃣ Créer un dépôt GitHub (si vous ne l'avez pas)
-
-1. Allez sur [github.com](https://github.com)
-2. Cliquez sur **"New repository"** (le bouton vert)
-3. Nom : `FrenchConnexion` (ou autre)
-4. Cochez **"Public"** ou **"Private"**
-5. **NE COCHEZ PAS** "Add README" ou "Add .gitignore" (on les a déjà)
-6. Cliquez **"Create repository"**
-
-### 2️⃣ Pousser votre code sur GitHub
-
-**Option A - Avec GitHub Desktop :**
-1. Téléchargez [GitHub Desktop](https://desktop.github.com)
-2. Installez-le et connectez-vous
-3. File → Add Local Repository
-4. Sélectionnez le dossier `FrenchConnexion`
-5. Cliquez sur **"Publish repository"** en haut
-6. Sélectionnez votre compte GitHub
-7. Cliquez **"Publish"**
-
-**Option B - Avec Git en ligne de commande :**
-```bash
-# Dans le dossier FrenchConnexion
-git init
-git add .
-git commit -m "Initial commit - French Connexion"
-git branch -M main
-git remote add origin https://github.com/VOTRE-USERNAME/FrenchConnexion.git
-git push -u origin main
-```
-
-### 3️⃣ Déployer sur Vercel
-
-1. **Sur l'écran Vercel que vous voyez** :
-   - Dans la section **"Import Git Repository"** (à gauche)
-   - Recherchez ou sélectionnez **"FrenchConnexion"** dans la liste
-   - Cliquez sur **"Import"** à côté
-
-2. **Configuration du projet** :
-   - Framework Preset : **Next.js** (détecté automatiquement)
-   - Root Directory : `.` (laissez vide)
-   - Build Command : `npm run build` (par défaut)
-   - Output Directory : `.next` (par défaut)
-   - Install Command : `npm install` (par défaut)
-   - **Ne changez rien**, cliquez **"Deploy"**
-
-3. **Attendre 2-3 minutes** pendant le build
-
-4. **Une fois terminé**, votre site sera en ligne ! 🎉
-
-### 4️⃣ Configurer les variables d'environnement
-
-**Sur la page de votre projet Vercel :**
-
-1. Allez dans **"Settings"** (en haut)
-2. Cliquez sur **"Environment Variables"** (dans le menu de gauche)
-3. Ajoutez ces variables une par une :
-
-```
-NEXT_PUBLIC_SITE_URL = https://votre-projet.vercel.app
-```
-```
-NEXT_PUBLIC_GATE_ENABLED = true
-```
-```
-NEXT_PUBLIC_GATE_PASSPHRASE = ENTRER
-```
-(Remplacez "ENTRER" par votre passphrase souhaitée)
-
-```
-DISCORD_WEBHOOK_URL = https://discord.com/api/webhooks/VOTRE_WEBHOOK
-```
-(Si vous avez un webhook Discord, sinon laissez vide)
-
-4. Pour chaque variable, cochez **"Production"**, **"Preview"** et **"Development"**
-5. Cliquez **"Save"** pour chaque variable
-6. **Redeployez** : Retournez dans **"Deployments"** → Cliquez sur les **3 points** → **"Redeploy"**
-
-### 5️⃣ Tester votre site
-
-1. Votre site est accessible sur : `https://votre-projet.vercel.app`
-2. Testez :
-   - ✅ La page d'accueil
-   - ✅ La navigation
-   - ✅ Le gate (passphrase : celle que vous avez configurée)
-   - ✅ Toutes les pages
-   - ✅ Le formulaire de contact
-
-## 🎯 Configuration d'un domaine personnalisé (Optionnel)
-
-1. Dans Vercel : **Settings** → **Domains**
-2. Entrez votre domaine (ex: `frenchconnexion.com`)
-3. Suivez les instructions pour configurer les DNS
-4. Attendez la propagation DNS (quelques minutes à quelques heures)
-
-## ⚠️ Si vous avez une erreur
-
-1. **Regardez les logs** : Dans Vercel → **Deployments** → Cliquez sur le déploiement → **"Logs"**
-2. **Vérifiez** que toutes les variables d'environnement sont bien configurées
-3. **Redeployez** après avoir corrigé
-
-## ✅ C'est tout !
-
-Votre site **French Connexion** est maintenant en ligne ! 🚀
+Le build fonctionne, MongoDB Atlas est configuré. Il ne reste que quelques étapes simples.
 
 ---
 
-**Besoin d'aide ?** Les logs de déploiement dans Vercel vous diront exactement ce qui ne va pas.
+## 📋 ÉTAPE 1 : Préparer le code sur GitHub
+
+### Option A : Avec GitHub Desktop (Recommandé)
+
+1. **Ouvrez GitHub Desktop**
+2. **Glissez-déposez** ce dossier `FrenchConnexion` dans GitHub Desktop
+   - OU cliquez sur **"Add an Existing Repository from your local drive..."**
+   - Sélectionnez `C:\Users\BELKREIR\Documents\FrenchConnexion`
+3. GitHub Desktop va détecter le projet
+4. **En bas à gauche**, tapez : `Initial commit - Bratva Volkov`
+5. Cliquez **"Commit to main"**
+6. Cliquez **"Publish repository"** (en haut)
+7. Nom : `bratva-volkov` (ou `FrenchConnexion`)
+   - Décochez "Keep this code private" (ou gardez-le selon votre préférence)
+8. Cliquez **"Publish Repository"**
+
+✅ **C'est fait ! Votre code est sur GitHub**
+
+### Option B : Avec Git en ligne de commande
+
+```bash
+git init
+git add .
+git commit -m "Initial commit - Bratva Volkov"
+git branch -M main
+git remote add origin https://github.com/VOTRE-USERNAME/bratva-volkov.git
+git push -u origin main
+```
+
+---
+
+## 📋 ÉTAPE 2 : Déployer sur Vercel
+
+### 1. Créer un compte Vercel
+
+1. Allez sur **https://vercel.com**
+2. Cliquez **"Sign Up"**
+3. Connectez-vous avec votre compte **GitHub** (recommandé)
+
+### 2. Importer votre projet
+
+1. Dans Vercel, cliquez **"Add New..."** → **"Project"**
+2. Dans la section **"Import Git Repository"**, vous verrez votre projet GitHub
+3. Cliquez sur **"Import"** à côté de votre projet
+4. **Configuration** (laissez tout par défaut) :
+   - Framework Preset : **Next.js** ✅
+   - Build Command : `npm run build` ✅
+   - Output Directory : `.next` ✅
+   - Install Command : `npm install` ✅
+5. **NE cliquez PAS encore sur "Deploy"** ! On doit d'abord configurer les variables d'environnement.
+
+---
+
+## 📋 ÉTAPE 3 : Configurer les variables d'environnement
+
+**Dans Vercel (avant le premier déploiement) :**
+
+1. Sur la page d'import, cliquez sur **"Environment Variables"** (en bas)
+2. **Ajoutez ces variables** une par une :
+
+### Variable 1 : MongoDB (OBLIGATOIRE)
+- **Name** : `MONGODB_URI`
+- **Value** : Votre chaîne de connexion MongoDB Atlas
+  ```
+  mongodb+srv://rayanebelkreir_db_user:UHXqQt4Lk5eIHT8F@cluster0.vpfynqf.mongodb.net/frenchconnection?retryWrites=true&w=majority
+  ```
+  (Remplacez par votre vraie chaîne de connexion)
+- **Environments** : Cochez ☑ Production, ☑ Preview, ☑ Development
+- Cliquez **"Save"**
+
+### Variable 2 : Email pour candidatures (OBLIGATOIRE)
+- **Name** : `RECIPIENT_EMAIL`
+- **Value** : `radiachakir1982@gmail.com`
+- **Environments** : ☑ Production, ☑ Preview, ☑ Development
+- Cliquez **"Save"**
+
+### Variable 3 : Resend API Key (Optionnel - pour emails)
+- **Name** : `RESEND_API_KEY`
+- **Value** : Votre clé API Resend (si vous en avez une)
+- **Environments** : ☑ Production, ☑ Preview, ☑ Development
+- Cliquez **"Save"**
+
+**OU**
+
+### Variable 3bis : SendGrid API Key (Optionnel - pour emails)
+- **Name** : `SENDGRID_API_KEY`
+- **Value** : Votre clé API SendGrid (si vous en avez une)
+- **Environments** : ☑ Production, ☑ Preview, ☑ Development
+- Cliquez **"Save"**
+
+### Variable 4 : URL du site (Optionnel - pour SEO)
+- **Name** : `NEXT_PUBLIC_SITE_URL`
+- **Value** : `https://votre-projet.vercel.app`
+  (Vous pourrez mettre la vraie URL après le déploiement)
+- **Environments** : ☑ Production, ☑ Preview, ☑ Development
+- Cliquez **"Save"**
+
+---
+
+## 📋 ÉTAPE 4 : Déployer !
+
+1. Après avoir ajouté toutes les variables, cliquez **"Deploy"** en bas
+2. **Attendez 2-3 minutes** pendant le build
+3. Vercel va automatiquement :
+   - Installer les dépendances
+   - Builder le projet
+   - Déployer le site
+
+✅ **Votre site sera en ligne !**
+
+---
+
+## 📋 ÉTAPE 5 : Configurer MongoDB Atlas (Accès Internet)
+
+**IMPORTANT** : MongoDB Atlas doit autoriser les connexions depuis Internet.
+
+1. Allez sur **https://www.mongodb.com/cloud/atlas**
+2. Connectez-vous à votre compte
+3. Cliquez sur votre cluster (Cluster0)
+4. Allez dans **"Network Access"** (menu gauche)
+5. Cliquez **"Add IP Address"**
+6. Cliquez **"Allow Access from Anywhere"** (0.0.0.0/0)
+   - OU ajoutez l'IP de Vercel si vous préférez restreindre
+7. Cliquez **"Confirm"**
+
+✅ **MongoDB est maintenant accessible depuis Vercel**
+
+---
+
+## 🎉 C'EST FINI !
+
+**Votre site est en ligne sur :**
+👉 `https://votre-projet.vercel.app`
+
+### ✅ Testez maintenant :
+- ✅ Page d'accueil (Bratva Volkov)
+- ✅ Connexion avec les comptes admin
+- ✅ Toutes les pages (Lore, Missions, Forum, etc.)
+- ✅ Formulaire de candidature
+- ✅ Panel admin
+
+---
+
+## 🔐 Comptes de test
+
+Une fois le site en ligne, vous pouvez vous connecter avec :
+
+- **Pakhan** : `antoine` / `admin123`
+- **Sovetnik** : `elise` / `admin123`
+- **Avtoritet** : `marc` / `admin123`
+
+---
+
+## 💡 Domaine personnalisé (Optionnel)
+
+Pour ajouter votre propre domaine (ex: `bratvavolkov.com`) :
+
+1. Dans Vercel → **Settings** → **Domains**
+2. Ajoutez votre domaine
+3. Suivez les instructions pour configurer les DNS chez votre registrar
+
+---
+
+## ⚠️ Si quelque chose ne marche pas
+
+### 1. Vérifier les logs de build
+- Dans Vercel → **Deployments** → Cliquez sur le dernier déploiement
+- Regardez les **"Logs"** pour voir les erreurs
+
+### 2. Vérifier les variables d'environnement
+- Dans Vercel → **Settings** → **Environment Variables**
+- Vérifiez que toutes les variables sont bien ajoutées
+- Vérifiez que `MONGODB_URI` est correct (avec le nom de la base de données)
+
+### 3. Vérifier MongoDB Atlas
+- Vérifiez que votre cluster est actif
+- Vérifiez que "Network Access" autorise 0.0.0.0/0
+- Vérifiez que votre utilisateur MongoDB a les bonnes permissions
+
+### 4. Redeployer
+- Après avoir corrigé, allez dans **Deployments**
+- Cliquez sur les **3 points** (⋯) du dernier déploiement
+- Cliquez **"Redeploy"**
+
+---
+
+## 📝 Notes importantes
+
+- ✅ **Toutes les données sont synchronisées** via MongoDB Atlas
+- ✅ **Les changements sont visibles par tous les utilisateurs** en temps réel
+- ✅ **Les données persistent** entre les sessions
+- ✅ **Le site est accessible 24/7** sur Internet
+
+---
+
+**Temps total : ~10 minutes** 🚀
+
+**Bratva Volkov** - Family. Honor. Respect.
 

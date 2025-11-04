@@ -9,49 +9,46 @@ interface GlareCardProps {
   children: ReactNode;
   className?: string;
   href?: string;
-  asChild?: boolean;
+  isParrain?: boolean;
+  isRestriction?: boolean; // Pour les popups de restriction (rouge au lieu de jaune)
 }
 
-export function GlareCard({
-  children,
-  className,
-  href,
-  asChild = false,
-}: GlareCardProps) {
+export function GlareCard({ children, className, href, isParrain = false, isRestriction = false }: GlareCardProps) {
   const content = (
     <motion.div
       className={cn(
-        "relative rounded-lg border border-gold/20 bg-anthracite/50 p-6 backdrop-blur-sm overflow-hidden group",
-        "transition-all duration-300",
-        href || asChild
-          ? "cursor-pointer hover:border-gold/40 hover:bg-anthracite/70"
-          : "",
+        "mafia-card magnify-hover",
+        isParrain && "parrain-card",
+        isRestriction && "restriction-card",
         className
       )}
-      whileHover={href || asChild ? { scale: 1.01 } : undefined}
-      transition={{ duration: 0.2 }}
+      whileHover={href ? { scale: 1.02, y: -2 } : undefined}
+      transition={{ duration: 0.3, ease: "easeOut" }}
     >
-      {/* Glare Effect */}
+      {/* Glare Effect - Rouge pour Parrain et Restrictions, Jaune pour les autres */}
       <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none">
-        <div className="absolute inset-0 bg-gradient-to-r from-transparent via-gold/10 to-transparent -skew-x-12 translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-1000" />
+        <div 
+          className={cn(
+            "absolute inset-0 bg-gradient-to-r from-transparent to-transparent -skew-x-12 translate-x-[-200%] group-hover:translate-x-[200%] transition-transform duration-1000",
+            isParrain || isRestriction
+              ? "via-blood-red/20" 
+              : "via-patina-gold/20"
+          )} 
+        />
       </div>
 
       {/* Content */}
       <div className="relative z-10">{children}</div>
-
-      {/* Corner Accent */}
-      <div className="absolute top-0 right-0 w-16 h-16 bg-gradient-to-br from-gold/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
     </motion.div>
   );
 
   if (href) {
     return (
-      <Link href={href} className="block">
+      <Link href={href} className="block group">
         {content}
       </Link>
     );
   }
 
-  return content;
+  return <div className="group">{content}</div>;
 }
-

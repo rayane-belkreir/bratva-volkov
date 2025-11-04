@@ -1,11 +1,11 @@
-import type { Metadata, Viewport } from "next";
+import type { Metadata } from "next";
 import { Cinzel, Inter } from "next/font/google";
 import "./globals.css";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
-import { SoundToggle } from "@/components/SoundToggle";
-import { Providers } from "@/app/providers";
-import { defaultMetadata, defaultViewport } from "@/lib/seo";
+import { AuthProvider } from "@/contexts/AuthContext";
+import { PendingStatusBanner } from "@/components/PendingStatusBanner";
+import { WelcomeGuideProvider } from "@/components/WelcomeGuideProvider";
 
 const cinzel = Cinzel({
   subsets: ["latin"],
@@ -19,8 +19,10 @@ const inter = Inter({
   display: "swap",
 });
 
-export const metadata: Metadata = defaultMetadata;
-export const viewport: Viewport = defaultViewport;
+export const metadata: Metadata = {
+  title: "Bratva Volkov - RP Mafia Russe",
+  description: "Serveur RP GTA centré sur une famille mafieuse russe. Family. Honor. Respect.",
+};
 
 export default function RootLayout({
   children,
@@ -29,19 +31,16 @@ export default function RootLayout({
 }) {
   return (
     <html lang="fr" className={`${cinzel.variable} ${inter.variable}`}>
-      <head>
-        <link rel="icon" href="/favicon.ico" />
-        <link rel="manifest" href="/manifest.webmanifest" />
-      </head>
-      <body>
-        <Providers>
-          <Header />
-          <main className="min-h-screen pt-20">{children}</main>
-          <Footer />
-          <SoundToggle />
-        </Providers>
+      <body className="font-cinzel flex flex-col min-h-screen">
+        <AuthProvider>
+          <WelcomeGuideProvider>
+            <Header />
+            <PendingStatusBanner />
+            <main className="flex-1 pt-20">{children}</main>
+            <Footer />
+          </WelcomeGuideProvider>
+        </AuthProvider>
       </body>
     </html>
   );
 }
-

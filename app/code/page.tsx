@@ -1,88 +1,130 @@
 "use client";
 
-import { SectionHeader } from "@/components/SectionHeader";
-import { GlareCard } from "@/components/GlareCard";
 import { motion } from "framer-motion";
-import { Shield, Lock, Users, Eye } from "lucide-react";
+import { GlareCard } from "@/components/GlareCard";
+import { Shield, Heart, Lock, Users, Target, Award } from "lucide-react";
 
 const codeItems = [
   {
-    icon: Shield,
+    id: 1,
     title: "Loyauté Absolue",
-    description:
-      "La loyauté n'est pas négociable. On ne trahit jamais le cercle. Les liens du sang ne sont rien face aux liens du serment.",
+    description: "La loyauté envers la famille passe avant tout. Trahir la Bratva, c'est signer son arrêt de mort.",
+    icon: Heart,
+    color: "blood-red",
   },
   {
+    id: 2,
+    title: "Omertà",
+    description: "Le silence est d'or. On ne parle jamais aux autorités. On ne trahit jamais ses frères.",
     icon: Lock,
-    title: "Silence et Discrétion",
-    description:
-      "Le bruit attire la lumière. Nous travaillons dans l'ombre. Chaque secret révélé est une faiblesse exposée.",
+    color: "patina-gold",
   },
   {
-    icon: Users,
+    id: 3,
     title: "Respect de la Hiérarchie",
-    description:
-      "La chaîne de commandement est sacrée. Chaque ordre est exécuté sans question. La discipline forge la force.",
+    description: "Chaque membre respecte son supérieur. Les ordres sont suivis sans question.",
+    icon: Users,
+    color: "patina-gold",
   },
   {
-    icon: Eye,
-    title: "Protection du Cercle",
-    description:
-      "Chaque membre protège les autres. L'organisation avant l'individu. Un pour tous, tous pour un.",
+    id: 4,
+    title: "Protection de la Famille",
+    description: "La famille avant tout. On protège les nôtres, coûte que coûte.",
+    icon: Shield,
+    color: "blood-red",
+  },
+  {
+    id: 5,
+    title: "Honneur et Dignité",
+    description: "On agit avec honneur. On ne recule jamais face à l'adversité.",
+    icon: Award,
+    color: "patina-gold",
+  },
+  {
+    id: 6,
+    title: "Règlement de Comptes",
+    description: "Les offenses ne restent jamais impunies. Œil pour œil, dent pour dent.",
+    icon: Target,
+    color: "blood-red",
   },
 ];
 
 export default function CodePage() {
   return (
-    <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-16">
-      <SectionHeader
-        title="Code d'Honneur"
-        subtitle="Les principes qui guident nos actions. L'éthique qui façonne notre organisation."
-      />
+    <div className="min-h-screen bg-charcoal-black aged-paper">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="text-center mb-16"
+        >
+          <h1 className="text-5xl md:text-6xl font-bold vintage-text text-patina-gold mb-4">
+            Code d'Honneur
+          </h1>
+          <p className="text-xl text-vintage-cream/80 max-w-2xl mx-auto">
+            Les principes qui nous guident. Le code qui nous unit. L'honneur qui nous définit.
+          </p>
+        </motion.div>
 
-      {/* Quote Banner */}
-      <motion.div
-        initial={{ opacity: 0, y: 10 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true, margin: "-50px" }}
-        transition={{ duration: 0.3 }}
-        className="mb-12 text-center"
-      >
-        <blockquote className="text-xl md:text-2xl font-cinzel italic text-gold border-l-4 border-gold pl-6 max-w-3xl mx-auto text-left">
-          &quot;Le bruit attire la lumière. Nous travaillons dans l&apos;ombre.&quot;
-        </blockquote>
-      </motion.div>
-
-      {/* Code Items */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {codeItems.map((item, index) => {
-          const Icon = item.icon;
-          return (
-            <motion.div
-              key={index}
-              initial={{ opacity: 0, y: 10 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-50px" }}
-              transition={{ duration: 0.3, delay: index * 0.05 }}
-            >
-              <GlareCard>
-                <div className="flex items-start gap-4">
-                  <Icon className="h-8 w-8 text-gold flex-shrink-0 mt-1" />
-                  <div>
-                    <h3 className="text-xl font-cinzel font-semibold text-gold mb-2">
-                      {item.title}
-                    </h3>
-                    <p className="text-cream-white/80 leading-relaxed">
-                      {item.description}
-                    </p>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+          {codeItems.map((item, index) => {
+            const Icon = item.icon;
+            return (
+              <motion.div
+                key={item.id}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+              >
+                <GlareCard className="aged-paper h-full">
+                  <div className="flex items-start gap-4 mb-4">
+                    <div className={`w-12 h-12 rounded-full flex items-center justify-center border-2 flex-shrink-0 ${
+                      item.color === 'blood-red' 
+                        ? 'bg-blood-red/20 border-blood-red/40' 
+                        : 'bg-patina-gold/20 border-patina-gold/40'
+                    }`}>
+                      <Icon className={`w-6 h-6 ${
+                        item.color === 'blood-red' ? 'text-blood-red' : 'text-patina-gold'
+                      }`} />
+                    </div>
+                    <div>
+                      <h3 className="text-xl font-bold text-patina-gold vintage-text mb-2">
+                        {item.title}
+                      </h3>
+                    </div>
                   </div>
-                </div>
-              </GlareCard>
-            </motion.div>
-          );
-        })}
+                  <p className="text-vintage-cream/80 leading-relaxed">
+                    {item.description}
+                  </p>
+                </GlareCard>
+              </motion.div>
+            );
+          })}
+        </div>
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5, delay: 0.6 }}
+        >
+          <GlareCard className="aged-paper border-2 border-blood-red/30">
+            <div className="text-center">
+              <h2 className="text-3xl font-bold text-blood-red vintage-text mb-4">
+                Citation
+              </h2>
+              <p className="text-xl text-vintage-cream/90 italic leading-relaxed">
+                "Dans notre monde, il n'y a pas de place pour les faibles. Seuls les loyaux survivent. 
+                Seuls les courageux prospèrent. Seuls les honorables méritent le respect."
+              </p>
+              <p className="text-patina-gold/70 mt-4 text-sm uppercase tracking-wider">
+                — Inconnu, Le Pakhan
+              </p>
+            </div>
+          </GlareCard>
+        </motion.div>
       </div>
     </div>
   );
 }
-

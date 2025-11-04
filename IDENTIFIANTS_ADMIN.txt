@@ -1,0 +1,34 @@
+==========================================
+   IDENTIFIANTS ADMIN - FRENCH CONNECTION
+==========================================
+
+🔐 COMPTE ADMINISTRATEUR PRINCIPAL
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Username: admin
+Password: admin123
+Role: Admin
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+🔐 AUTRES COMPTES DISPONIBLES
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Username: antoine
+Password: admin123
+Role: Parrain
+
+Username: elise
+Password: admin123
+Role: Consigliere
+
+Username: marc
+Password: admin123
+Role: Capo
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+⚠️  IMPORTANT
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Ces identifiants sont pour le PANEL ADMIN du site web.
+Le roleplay se déroule dans le jeu sur le serveur GTA RP.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+

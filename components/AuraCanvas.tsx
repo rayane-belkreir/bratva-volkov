@@ -1,21 +1,14 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import { cn } from "@/lib/utils";
+import { useEffect, useRef } from "react";
 
 interface AuraCanvasProps {
   intensity?: number;
   paused?: boolean;
-  className?: string;
 }
 
-export function AuraCanvas({
-  intensity = 0.3,
-  paused = false,
-  className,
-}: AuraCanvasProps) {
+export function AuraCanvas({ intensity = 0.3, paused = false }: AuraCanvasProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const [isVisible, setIsVisible] = useState(true);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -41,27 +34,26 @@ export function AuraCanvas({
 
     const initParticles = () => {
       particles = [];
-      // Réduire le nombre de particules pour améliorer les performances
-      const particleCount = Math.min(Math.floor((canvas.width * canvas.height) / 60000), 50);
+      const particleCount = Math.min(Math.floor((canvas.width * canvas.height) / 50000), 50);
       for (let i = 0; i < particleCount; i++) {
         particles.push({
           x: Math.random() * canvas.width,
           y: Math.random() * canvas.height,
-          vx: (Math.random() - 0.5) * 0.15,
-          vy: (Math.random() - 0.5) * 0.15,
-          size: Math.random() * 1.5 + 0.5,
-          opacity: Math.random() * 0.2 + 0.05,
+          vx: (Math.random() - 0.5) * 0.2,
+          vy: (Math.random() - 0.5) * 0.2,
+          size: Math.random() * 2 + 0.5,
+          opacity: Math.random() * 0.3 + 0.1,
         });
       }
     };
 
     const animate = () => {
-      if (paused || !isVisible) {
+      if (paused) {
         animationFrameId = requestAnimationFrame(animate);
         return;
       }
 
-      ctx.fillStyle = `rgba(11, 11, 11, ${0.05})`;
+      ctx.fillStyle = `rgba(5, 5, 5, ${0.08})`;
       ctx.fillRect(0, 0, canvas.width, canvas.height);
 
       particles.forEach((particle) => {
@@ -75,8 +67,11 @@ export function AuraCanvas({
 
         ctx.beginPath();
         ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(193, 163, 95, ${particle.opacity * intensity})`;
+        ctx.fillStyle = `rgba(201, 169, 97, ${particle.opacity * intensity})`;
+        ctx.shadowBlur = 10;
+        ctx.shadowColor = "rgba(201, 169, 97, 0.5)";
         ctx.fill();
+        ctx.shadowBlur = 0;
       });
 
       animationFrameId = requestAnimationFrame(animate);
@@ -91,26 +86,19 @@ export function AuraCanvas({
       initParticles();
     };
 
-    const handleVisibilityChange = () => {
-      setIsVisible(!document.hidden);
-    };
-
     window.addEventListener("resize", handleResize);
-    document.addEventListener("visibilitychange", handleVisibilityChange);
 
     return () => {
       cancelAnimationFrame(animationFrameId);
       window.removeEventListener("resize", handleResize);
-      document.removeEventListener("visibilitychange", handleVisibilityChange);
     };
-  }, [intensity, paused, isVisible]);
+  }, [intensity, paused]);
 
   return (
     <canvas
       ref={canvasRef}
-      className={cn("fixed inset-0 pointer-events-none z-0", className)}
+      className="fixed inset-0 pointer-events-none z-0"
       aria-hidden="true"
     />
   );
 }
-
