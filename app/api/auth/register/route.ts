@@ -41,7 +41,14 @@ export async function POST(request: NextRequest) {
     await newUser.save();
 
     const { password: _, ...userWithoutPassword } = newUser.toObject();
-    return NextResponse.json(userWithoutPassword, { status: 201 });
+    
+    // S'assurer que l'ID est correctement formaté (MongoDB ObjectId → id string)
+    const formattedUser = {
+      ...userWithoutPassword,
+      id: userWithoutPassword._id?.toString() || userWithoutPassword.id,
+    };
+    
+    return NextResponse.json(formattedUser, { status: 201 });
   } catch (error) {
     console.error('Error registering user:', error);
     return NextResponse.json({ error: 'Error registering user' }, { status: 500 });
