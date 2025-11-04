@@ -6,12 +6,26 @@ import Article from '@/models/Article';
 export async function GET() {
   try {
     await connectDB();
-    const articles: any[] = await Article.find({}).sort({ date: -1 }).lean();
+    // Optimiser la requête : ne récupérer que les champs nécessaires
+    const articles: any[] = await Article.find({})
+      .select('title date author category content locked requiredRank')
+      .sort({ date: -1 })
+      .lean()
+      .limit(100); // Limiter à 100 articles max
+    
     const formattedArticles = articles.map((article: any) => ({
       ...article,
       id: article._id.toString(),
+      // Créer un excerpt si pas présent
+      excerpt: article.excerpt || article.content?.substring(0, 150) || '',
     }));
-    return NextResponse.json(formattedArticles);
+    
+    // Ajouter des headers de cache pour améliorer les performances
+    return NextResponse.json(formattedArticles, {
+      headers: {
+        'Cache-Control': 'public, s-maxage=60, stale-while-revalidate=300',
+      },
+    });
   } catch (error: any) {
     console.error('Error fetching articles:', error);
     

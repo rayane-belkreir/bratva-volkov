@@ -13,11 +13,22 @@ import Link from "next/link";
 export default function DossiersPage() {
   const { user, isAuthenticated } = useAuth();
   const [articles, setArticles] = useState<Article[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const loadArticles = async () => {
-      const loadedArticles = await getArticles();
-      setArticles(loadedArticles);
+      try {
+        setLoading(true);
+        setError(null);
+        const loadedArticles = await getArticles();
+        setArticles(loadedArticles);
+      } catch (err) {
+        console.error('Error loading articles:', err);
+        setError('Erreur lors du chargement des articles');
+      } finally {
+        setLoading(false);
+      }
     };
     loadArticles();
   }, []);
@@ -69,8 +80,57 @@ export default function DossiersPage() {
         </motion.div>
 
         <div className="max-w-4xl mx-auto">
-          <div className="space-y-6">
-            {articles.map((article, index) => {
+          {loading && (
+            <div className="space-y-6">
+              {[1, 2, 3].map((i) => (
+                <div key={i} className="bg-anthracite/50 rounded-lg p-6 border border-patina-gold/20 animate-pulse">
+                  <div className="flex items-start gap-4">
+                    <div className="w-12 h-12 bg-patina-gold/20 rounded-full flex-shrink-0"></div>
+                    <div className="flex-1 space-y-3">
+                      <div className="h-6 bg-patina-gold/20 rounded w-3/4"></div>
+                      <div className="h-4 bg-vintage-cream/10 rounded w-1/2"></div>
+                      <div className="h-4 bg-vintage-cream/10 rounded w-full"></div>
+                      <div className="h-4 bg-vintage-cream/10 rounded w-5/6"></div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {error && (
+            <GlareCard className="aged-paper border-2 border-blood-red/40">
+              <div className="text-center p-8">
+                <h3 className="text-xl font-bold text-blood-red mb-4">Erreur de chargement</h3>
+                <p className="text-vintage-cream/80 mb-4">{error}</p>
+                <button
+                  onClick={() => {
+                    setLoading(true);
+                    setError(null);
+                    getArticles()
+                      .then(setArticles)
+                      .catch((err) => {
+                        console.error('Error loading articles:', err);
+                        setError('Erreur lors du chargement des articles');
+                      })
+                      .finally(() => setLoading(false));
+                  }}
+                  className="px-6 py-3 bg-patina-gold text-charcoal-black hover:bg-patina-gold-light transition-colors font-bold uppercase tracking-wider"
+                >
+                  Réessayer
+                </button>
+              </div>
+            </GlareCard>
+          )}
+
+          {!loading && !error && (
+            <div className="space-y-6">
+              {articles.length === 0 ? (
+                <GlareCard className="aged-paper text-center p-8">
+                  <p className="text-vintage-cream/80">Aucun article disponible pour le moment.</p>
+                </GlareCard>
+              ) : (
+                articles.map((article, index) => {
               const accessible = canAccessArticle(article);
               return (
                 <motion.div
@@ -138,8 +198,9 @@ export default function DossiersPage() {
                   </GlareCard>
                 </motion.div>
               );
-            })}
+            }))}
           </div>
+          )}
         </div>
       </div>
     </div>
