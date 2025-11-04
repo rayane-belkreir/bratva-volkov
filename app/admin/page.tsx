@@ -114,7 +114,14 @@ export default function AdminPage() {
           throw new Error("Utilisateur non trouvé");
         }
         
-        const result = await updateUser(String(userId), {
+        const userIdStr = String(userId).trim();
+        
+        // Vérifier que l'ID est un string MongoDB valide
+        if (userIdStr.length !== 24 || !/^[0-9a-fA-F]{24}$/.test(userIdStr)) {
+          throw new Error("ID utilisateur invalide : format MongoDB requis (24 caractères hex)");
+        }
+        
+        const result = await updateUser(userIdStr, {
           status: 'approved',
           money: 10000, // Donner l'argent de départ
           reputation: 0,
@@ -357,8 +364,15 @@ export default function AdminPage() {
       cancelText: "Annuler",
     }, async () => {
       try {
-        console.log('📝 Deleting member:', userId);
-        const success = await deleteUser(String(userId));
+        const userIdStr = String(userId).trim();
+        
+        // Vérifier que l'ID est un string MongoDB valide
+        if (userIdStr.length !== 24 || !/^[0-9a-fA-F]{24}$/.test(userIdStr)) {
+          throw new Error("ID utilisateur invalide : format MongoDB requis (24 caractères hex)");
+        }
+        
+        console.log('📝 Deleting member:', userIdStr);
+        const success = await deleteUser(userIdStr);
         
         if (!success) {
           throw new Error("La suppression a échoué");
@@ -1230,7 +1244,17 @@ export default function AdminPage() {
                     </p>
                     <div className="flex flex-wrap gap-2">
                       <button 
-                        onClick={() => handleEditMission(mission)}
+                        onClick={() => {
+                          if (!mission || !mission.id) {
+                            alert({
+                              title: "Erreur",
+                              message: "Impossible de modifier cette mission : ID invalide",
+                              type: "danger",
+                            });
+                            return;
+                          }
+                          handleEditMission(mission);
+                        }}
                         className="px-2 md:px-3 py-1 bg-patina-gold/20 border border-patina-gold/40 text-patina-gold hover:bg-patina-gold/30 transition-colors text-xs font-bold uppercase"
                       >
                         Modifier
