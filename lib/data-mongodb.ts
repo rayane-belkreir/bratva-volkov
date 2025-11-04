@@ -120,25 +120,43 @@ export async function addMessage(message: Omit<ForumMessage, 'id' | 'time'>): Pr
   }
 }
 
+// Cache simple en mémoire pour améliorer les performances
+let articlesCache: { data: Article[]; timestamp: number } | null = null;
+const CACHE_DURATION = 30000; // 30 secondes
+
 export async function getArticles(): Promise<Article[]> {
   try {
-    // Utiliser cache et revalidate pour améliorer les performances
+    // Vérifier le cache
+    if (articlesCache && Date.now() - articlesCache.timestamp < CACHE_DURATION) {
+      return articlesCache.data;
+    }
+
     const response = await fetch(`${API_BASE}/articles`, {
-      cache: 'force-cache',
-      next: { revalidate: 60 }, // Revalider toutes les 60 secondes
+      headers: {
+        'Cache-Control': 'max-age=60',
+      },
     });
     if (!response.ok) {
-      return [];
+      return articlesCache?.data || [];
     }
     const articles = await response.json();
     // Convertir les id MongoDB en number pour compatibilité
-    return articles.map((article: any) => ({
+    const formattedArticles = articles.map((article: any) => ({
       ...article,
       id: parseInt(article.id) || article.id,
     }));
+    
+    // Mettre en cache
+    articlesCache = {
+      data: formattedArticles,
+      timestamp: Date.now(),
+    };
+    
+    return formattedArticles;
   } catch (error) {
     console.error('Error fetching articles:', error);
-    return [];
+    // Retourner le cache si disponible en cas d'erreur
+    return articlesCache?.data || [];
   }
 }
 
