@@ -1229,7 +1229,14 @@ export default function AdminPage() {
               {contracts.length === 0 ? (
                 <p className="text-center text-vintage-cream/60 py-8">Aucune mission trouvée</p>
               ) : (
-                contracts.map((mission) => (
+                contracts
+                  .filter((mission) => {
+                    // Filtrer les missions avec des IDs invalides
+                    if (!mission || !mission.id) return false;
+                    const missionIdStr = String(mission.id).trim();
+                    return missionIdStr.length === 24 && /^[0-9a-fA-F]{24}$/.test(missionIdStr);
+                  })
+                  .map((mission) => (
                   <div
                     key={mission.id}
                     className="p-3 md:p-4 bg-anthracite/50 rounded-lg border border-patina-gold/20"
