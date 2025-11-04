@@ -86,9 +86,9 @@ export function MemberOnlyPopup({
 
                 {/* Badge membre */}
                 <div className="flex justify-center mb-6">
-                  <div className="flex items-center gap-2 px-4 py-2 bg-patina-gold/20 border border-patina-gold/40 rounded-lg">
-                    <Shield className="w-5 h-5 text-patina-gold" />
-                    <span className="text-sm font-bold text-patina-gold uppercase tracking-wider">
+                  <div className="flex items-center gap-2 px-4 py-2 bg-blood-red/20 border border-blood-red/40 rounded-lg">
+                    <Shield className="w-5 h-5 text-blood-red" />
+                    <span className="text-sm font-bold text-blood-red uppercase tracking-wider">
                       Membres uniquement
                     </span>
                   </div>
@@ -99,7 +99,7 @@ export function MemberOnlyPopup({
                   <Link
                     href="/login"
                     onClick={onClose}
-                    className="flex-1 px-6 py-4 bg-patina-gold text-charcoal-black hover:bg-patina-gold-light transition-colors font-bold uppercase tracking-wider text-center rounded-lg flex items-center justify-center min-h-[50px] whitespace-nowrap"
+                    className="flex-1 px-6 py-4 bg-blood-red/20 border-2 border-blood-red/60 text-blood-red hover:bg-blood-red/30 hover:border-blood-red/80 transition-all font-bold uppercase tracking-wider text-center rounded-lg flex items-center justify-center min-h-[50px] whitespace-nowrap"
                     style={{ textAlign: 'center' }}
                   >
                     <span className="w-full">Se Connecter</span>
@@ -107,7 +107,7 @@ export function MemberOnlyPopup({
                   <Link
                     href="/join"
                     onClick={onClose}
-                    className="flex-1 px-6 py-4 bg-blood-red text-vintage-cream hover:bg-blood-red/80 hover:border-blood-red/60 transition-colors font-bold uppercase tracking-wider text-center rounded-lg flex items-center justify-center min-h-[50px] whitespace-nowrap border-2 border-blood-red/60"
+                    className="flex-1 px-6 py-4 bg-blood-red text-vintage-cream hover:bg-blood-red/90 hover:border-blood-red transition-all font-bold uppercase tracking-wider text-center rounded-lg flex items-center justify-center min-h-[50px] whitespace-nowrap border-2 border-blood-red/80 shadow-[0_0_20px_rgba(139,0,0,0.5)] hover:shadow-[0_0_30px_rgba(139,0,0,0.8)]"
                     style={{ textAlign: 'center', fontSize: '1rem' }}
                   >
                     <span className="w-full text-lg">Rejoindre</span>
