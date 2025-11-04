@@ -21,10 +21,7 @@ export function DatabaseInitializer() {
       try {
         setIsInitializing(true);
         const response = await fetch('/api/init', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
+          method: 'GET',
         });
 
         if (response.ok) {
