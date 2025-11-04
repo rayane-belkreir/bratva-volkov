@@ -41,9 +41,25 @@ export default function JoinPage() {
         return;
       }
 
+      // Vérifier que l'utilisateur a un ID valide avant de mettre à jour
+      if (!newUser || !newUser.id) {
+        setError("Erreur lors de la création du compte : ID invalide");
+        setLoading(false);
+        return;
+      }
+
+      const userIdStr = String(newUser.id).trim();
+      
+      // Vérifier que l'ID est un string MongoDB valide (24 caractères hex)
+      if (userIdStr.length !== 24 || !/^[0-9a-fA-F]{24}$/.test(userIdStr)) {
+        setError("Erreur lors de la création du compte : ID invalide (format MongoDB requis)");
+        setLoading(false);
+        return;
+      }
+
       // Mettre à jour le compte avec les données de candidature et statut "pending"
       const { updateUser } = await import("@/lib/auth");
-      await updateUser(newUser.id, {
+      const updatedUser = await updateUser(userIdStr, {
         status: 'pending',
         applicationData: {
           pseudo,
@@ -53,6 +69,12 @@ export default function JoinPage() {
         },
         role: 'Bratan', // Rôle par défaut
       });
+
+      if (!updatedUser) {
+        setError("Erreur lors de la mise à jour du compte");
+        setLoading(false);
+        return;
+      }
 
       // Envoyer l'email via l'API
       const response = await fetch("/api/recruitment", {
