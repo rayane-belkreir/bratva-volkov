@@ -44,11 +44,16 @@ export default function AdminPage() {
   const refreshData = async () => {
     // Toujours lire depuis MongoDB pour avoir les données les plus récentes
     try {
+      console.log('🔄 Refreshing data...');
       const allUsers = await getAllUsers();
       const allContracts = await getContracts();
       
-      setMembers(allUsers);
-      setContracts(allContracts);
+      console.log('✅ Users loaded:', allUsers.length);
+      console.log('✅ Contracts loaded:', allContracts.length);
+      
+      // Forcer la mise à jour avec de nouvelles références
+      setMembers([...allUsers]);
+      setContracts([...allContracts]);
       
       const activeMissions = allContracts.filter((c) => c.status === "in_progress").length;
       const totalRevenue = allUsers.reduce((sum, u) => sum + (u.money || 0), 0);
@@ -60,8 +65,10 @@ export default function AdminPage() {
         totalRevenue,
         reputationPoints: totalRep,
       });
+      
+      console.log('✅ Data refreshed successfully');
     } catch (error) {
-      console.error('Error refreshing data:', error);
+      console.error('❌ Error refreshing data:', error);
     }
   };
 
@@ -85,37 +92,48 @@ export default function AdminPage() {
       cancelText: "Annuler",
     }, async () => {
       try {
+        console.log('📝 Approving application for user:', userId);
         const userToApprove = members.find(u => u.id === userId);
-        if (userToApprove) {
-          const result = await updateUser(userId, {
-            status: 'approved',
-            money: 10000, // Donner l'argent de départ
-            reputation: 0,
-          });
-          
-          if (!result) {
-            throw new Error("L'approbation a échoué");
-          }
-          
-          // Attendre que les données soient rafraîchies
-          await refreshData();
-          
-          alert({
-            title: "Succès",
-            message: "Candidature approuvée avec succès",
-            type: "success",
-          });
-          
-          // Le guide s'affichera automatiquement si l'utilisateur ne l'a jamais vu
-          // (via localStorage dans WelcomeGuideProvider)
+        if (!userToApprove) {
+          throw new Error("Utilisateur non trouvé");
         }
-      } catch (error) {
+        
+        const result = await updateUser(userId, {
+          status: 'approved',
+          money: 10000, // Donner l'argent de départ
+          reputation: 0,
+        });
+        
+        console.log('📝 Update result:', result);
+        
+        if (!result) {
+          throw new Error("L'approbation a échoué - aucun résultat");
+        }
+        
+        // Attendre un peu pour que MongoDB mette à jour
+        await new Promise(resolve => setTimeout(resolve, 500));
+        
+        // Attendre que les données soient rafraîchies
+        await refreshData();
+        
+        // Attendre encore un peu pour que React mette à jour l'état
+        await new Promise(resolve => setTimeout(resolve, 300));
+        
+        alert({
+          title: "Succès",
+          message: "Candidature approuvée avec succès",
+          type: "success",
+        });
+        
+        // Le guide s'affichera automatiquement si l'utilisateur ne l'a jamais vu
+        // (via localStorage dans WelcomeGuideProvider)
+      } catch (error: any) {
+        console.error('❌ Error approving application:', error);
         alert({
           title: "Erreur",
-          message: "Erreur lors de l'approbation",
+          message: error.message || "Erreur lors de l'approbation",
           type: "danger",
         });
-        console.error(error);
       }
     });
   };
@@ -140,29 +158,38 @@ export default function AdminPage() {
       cancelText: "Annuler",
     }, async () => {
       try {
+        console.log('📝 Rejecting application for user:', userId);
         const result = await updateUser(userId, {
           status: 'rejected',
         });
         
+        console.log('📝 Update result:', result);
+        
         if (!result) {
-          throw new Error("Le refus a échoué");
+          throw new Error("Le refus a échoué - aucun résultat");
         }
+        
+        // Attendre un peu pour que MongoDB mette à jour
+        await new Promise(resolve => setTimeout(resolve, 500));
         
         // Attendre que les données soient rafraîchies
         await refreshData();
+        
+        // Attendre encore un peu pour que React mette à jour l'état
+        await new Promise(resolve => setTimeout(resolve, 300));
         
         alert({
           title: "Candidature refusée",
           message: "La candidature a été refusée.",
           type: "info",
         });
-      } catch (error) {
+      } catch (error: any) {
+        console.error('❌ Error rejecting application:', error);
         alert({
           title: "Erreur",
-          message: "Erreur lors du refus",
+          message: error.message || "Erreur lors du refus",
           type: "danger",
         });
-        console.error(error);
       }
     });
   };
@@ -173,12 +200,16 @@ export default function AdminPage() {
     }
   }, [isAuthenticated, user]);
 
-  // Synchroniser les données automatiquement
-  useDataSync(() => {
-    if (isAuthenticated && user) {
+  // Synchroniser les données automatiquement toutes les 5 secondes
+  useEffect(() => {
+    if (!isAuthenticated || !user) return;
+    
+    const interval = setInterval(() => {
       refreshData();
-    }
-  }, 2000); // Rafraîchir toutes les 2 secondes
+    }, 5000); // Rafraîchir toutes les 5 secondes
+    
+    return () => clearInterval(interval);
+  }, [isAuthenticated, user]);
 
   useEffect(() => {
     if (isAuthenticated && user) {

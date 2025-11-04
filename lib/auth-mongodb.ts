@@ -86,6 +86,7 @@ export async function getAllUsers(): Promise<User[]> {
 
 export async function updateUser(userId: string, updates: Partial<User>): Promise<User | null> {
   try {
+    console.log('🔄 Updating user:', userId, 'with updates:', updates);
     const response = await fetch(`${API_BASE}/users/${userId}`, {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
@@ -93,10 +94,13 @@ export async function updateUser(userId: string, updates: Partial<User>): Promis
     });
 
     if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      console.error('❌ Update failed:', response.status, errorData);
       return null;
     }
 
     const updatedUser = await response.json();
+    console.log('✅ User updated successfully:', updatedUser);
     
     // Mettre à jour l'utilisateur actuel si c'est lui
     const currentUser = getCurrentUser();
@@ -106,7 +110,7 @@ export async function updateUser(userId: string, updates: Partial<User>): Promis
 
     return updatedUser;
   } catch (error) {
-    console.error('Error updating user:', error);
+    console.error('❌ Error updating user:', error);
     return null;
   }
 }

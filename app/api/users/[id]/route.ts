@@ -31,6 +31,8 @@ export async function PUT(request: NextRequest, context: RouteContext) {
     const body = await request.json();
     const { password, ...updates } = body;
 
+    console.log('🔄 API: Updating user', id, 'with:', updates);
+
     // Si un nouveau mot de passe est fourni, le hasher
     if (password) {
       updates.password = await bcrypt.hash(password, 10);
@@ -43,6 +45,7 @@ export async function PUT(request: NextRequest, context: RouteContext) {
     ).select('-password').lean();
 
     if (!user) {
+      console.error('❌ API: User not found:', id);
       return NextResponse.json({ error: 'User not found' }, { status: 404 });
     }
 
@@ -52,10 +55,14 @@ export async function PUT(request: NextRequest, context: RouteContext) {
       id: user._id.toString(),
     };
 
+    console.log('✅ API: User updated successfully:', formattedUser.username, 'status:', formattedUser.status);
     return NextResponse.json(formattedUser);
-  } catch (error) {
-    console.error('Error updating user:', error);
-    return NextResponse.json({ error: 'Error updating user' }, { status: 500 });
+  } catch (error: any) {
+    console.error('❌ API: Error updating user:', error);
+    return NextResponse.json({ 
+      error: 'Error updating user', 
+      details: error.message 
+    }, { status: 500 });
   }
 }
 
