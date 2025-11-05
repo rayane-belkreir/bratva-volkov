@@ -894,7 +894,29 @@ export default function AdminPage() {
                       if (selected) {
                         const memberToRemove = membersToRemove.find(m => m.username.toLowerCase() === selected.toLowerCase());
                         if (memberToRemove) {
-                          handleDeleteMember(memberToRemove.id);
+                          // Vérifier que l'ID est valide AVANT d'appeler handleDeleteMember
+                          if (!memberToRemove || !memberToRemove.id) {
+                            alert({
+                              title: "Erreur",
+                              message: "L'ID du membre n'est pas défini",
+                              type: "danger",
+                            });
+                            console.error('❌ Cannot delete member: invalid ID', memberToRemove);
+                            return;
+                          }
+                          
+                          const memberIdStr = String(memberToRemove.id).trim();
+                          if (memberIdStr.length !== 24 || !/^[0-9a-fA-F]{24}$/.test(memberIdStr)) {
+                            alert({
+                              title: "Erreur",
+                              message: "ID membre invalide : format MongoDB requis (24 caractères hex)",
+                              type: "danger",
+                            });
+                            console.error('❌ Cannot delete member: invalid MongoDB ID format', memberIdStr);
+                            return;
+                          }
+                          
+                          handleDeleteMember(memberIdStr);
                         } else {
                           alert({
                             title: "Membre non trouvé",
@@ -1079,15 +1101,29 @@ export default function AdminPage() {
                       {user && canRemoveUser(user.role, member.role) && (
                         <button 
                           onClick={() => {
-                            if (!member.id) {
+                            // Vérifier que l'ID est valide AVANT d'appeler handleDeleteMember
+                            if (!member || !member.id) {
                               alert({
                                 title: "Erreur",
                                 message: "L'ID du membre n'est pas défini",
                                 type: "danger",
                               });
+                              console.error('❌ Cannot delete member: invalid ID', member);
                               return;
                             }
-                            handleDeleteMember(member.id);
+                            
+                            const memberIdStr = String(member.id).trim();
+                            if (memberIdStr.length !== 24 || !/^[0-9a-fA-F]{24}$/.test(memberIdStr)) {
+                              alert({
+                                title: "Erreur",
+                                message: "ID membre invalide : format MongoDB requis (24 caractères hex)",
+                                type: "danger",
+                              });
+                              console.error('❌ Cannot delete member: invalid MongoDB ID format', memberIdStr);
+                              return;
+                            }
+                            
+                            handleDeleteMember(memberIdStr);
                           }}
                           className="p-2 hover:bg-blood-red/10 rounded transition-colors"
                           title="Supprimer le compte"
@@ -1531,8 +1567,32 @@ export default function AdminPage() {
                     </div>
                     <div className="flex flex-col sm:flex-row gap-2 md:gap-3 flex-shrink-0">
                       {user && canRemoveUser(user.role, applicant.role) && (
-                        <button
-                          onClick={() => handleDeleteMember(applicant.id)}
+                        <button 
+                          onClick={() => {
+                            // Vérifier que l'ID est valide AVANT d'appeler handleDeleteMember
+                            if (!applicant || !applicant.id) {
+                              alert({
+                                title: "Erreur",
+                                message: "L'ID du membre n'est pas défini",
+                                type: "danger",
+                              });
+                              console.error('❌ Cannot delete applicant: invalid ID', applicant);
+                              return;
+                            }
+                            
+                            const applicantIdStr = String(applicant.id).trim();
+                            if (applicantIdStr.length !== 24 || !/^[0-9a-fA-F]{24}$/.test(applicantIdStr)) {
+                              alert({
+                                title: "Erreur",
+                                message: "ID membre invalide : format MongoDB requis (24 caractères hex)",
+                                type: "danger",
+                              });
+                              console.error('❌ Cannot delete applicant: invalid MongoDB ID format', applicantIdStr);
+                              return;
+                            }
+                            
+                            handleDeleteMember(applicantIdStr);
+                          }}
                           className="px-4 py-2 bg-transparent border-2 border-blood-red/40 text-blood-red hover:bg-blood-red/10 hover:border-blood-red/60 transition-colors font-bold uppercase tracking-wider text-xs md:text-sm flex items-center justify-center gap-2 rounded-lg"
                         >
                           <Trash2 className="w-4 h-4" />
