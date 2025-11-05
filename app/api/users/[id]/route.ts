@@ -39,27 +39,28 @@ export async function GET(request: NextRequest, context: RouteContext) {
       );
     }
     
-        await connectDB();
-        const user: any = await User.findById(idStr).select('-password').lean();
-        if (!user) {
-          return NextResponse.json(
-            { error: 'User not found' },
-            {
-              status: 404,
-              headers: {
-                'Allow': 'GET, PUT, DELETE, OPTIONS'
-              }
-            }
-          );
+    await connectDB();
+    const userDoc: any = await User.findById(idStr).select('-password').lean();
+    if (!userDoc) {
+      return NextResponse.json(
+        { error: 'User not found' },
+        {
+          status: 404,
+          headers: {
+            'Allow': 'GET, PUT, DELETE, OPTIONS'
+          }
         }
-        
-        // Formater l'ID correctement
-        const formattedUser = {
-          ...user,
-          id: user._id?.toString() || user.id || idStr,
-        };
-        
-        return NextResponse.json(formattedUser);
+      );
+    }
+    
+    // Formater l'ID correctement
+    const user = userDoc as any;
+    const formattedUser = {
+      ...user,
+      id: (user._id as any)?.toString() || user.id || idStr,
+    };
+    
+    return NextResponse.json(formattedUser);
   } catch (error) {
     console.error('Error fetching user:', error);
     return NextResponse.json(
