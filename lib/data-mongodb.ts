@@ -11,18 +11,28 @@ export async function getContracts(): Promise<Contract[]> {
     }
     const contracts = await response.json();
     // Garder les IDs comme strings (MongoDB ObjectId)
+    // Filtrer les contrats avec des IDs invalides (non MongoDB ObjectId)
     const contractsWithIds = contracts.map((contract: any) => {
       if (!contract.id && !contract._id) {
         console.error('❌ Contract without ID:', contract);
         return null;
       }
+      
+      const contractId = contract.id || contract._id?.toString() || '';
+      
+      // Vérifier que l'ID est un MongoDB ObjectId valide (24 caractères hex)
+      if (!contractId || contractId.length !== 24 || !/^[0-9a-fA-F]{24}$/.test(contractId)) {
+        console.error('❌ Contract with invalid ID format (not MongoDB ObjectId):', contractId, contract.title);
+        return null; // Exclure les contrats avec des IDs invalides
+      }
+      
       return {
         ...contract,
-        id: contract.id || contract._id?.toString() || contract.id,
+        id: contractId,
       };
     }).filter((c: any) => c !== null);
     
-    console.log('✅ Contracts fetched:', contractsWithIds.length, 'contracts with valid IDs');
+    console.log('✅ Contracts fetched:', contractsWithIds.length, 'contracts with valid MongoDB ObjectIds');
     return contractsWithIds;
   } catch (error) {
     console.error('❌ Error fetching contracts:', error);
