@@ -11,12 +11,18 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: 'User ID not provided' }, { status: 401 });
     }
 
-    const user = await User.findById(userId).select('-password').lean();
+    const user: any = await User.findById(userId).select('-password').lean();
     if (!user) {
       return NextResponse.json({ error: 'User not found' }, { status: 404 });
     }
 
-    return NextResponse.json(user);
+    // Formater l'ID correctement
+    const formattedUser = {
+      ...user,
+      id: user._id?.toString() || user.id || userId,
+    };
+
+    return NextResponse.json(formattedUser);
   } catch (error) {
     console.error('Error fetching current user:', error);
     return NextResponse.json({ error: 'Error fetching current user' }, { status: 500 });

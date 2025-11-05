@@ -39,27 +39,27 @@ export async function GET(request: NextRequest, context: RouteContext) {
       );
     }
     
-    await connectDB();
-    const user = await User.findById(idStr).select('-password').lean();
-    if (!user) {
-      return NextResponse.json(
-        { error: 'User not found' },
-        { 
-          status: 404,
-          headers: {
-            'Allow': 'GET, PUT, DELETE, OPTIONS'
-          }
+        await connectDB();
+        const user: any = await User.findById(idStr).select('-password').lean();
+        if (!user) {
+          return NextResponse.json(
+            { error: 'User not found' },
+            {
+              status: 404,
+              headers: {
+                'Allow': 'GET, PUT, DELETE, OPTIONS'
+              }
+            }
+          );
         }
-      );
-    }
-    
-    // Formater l'ID correctement
-    const formattedUser = {
-      ...user,
-      id: user._id?.toString() || user.id,
-    };
-    
-    return NextResponse.json(formattedUser);
+        
+        // Formater l'ID correctement
+        const formattedUser = {
+          ...user,
+          id: user._id?.toString() || user.id || idStr,
+        };
+        
+        return NextResponse.json(formattedUser);
   } catch (error) {
     console.error('Error fetching user:', error);
     return NextResponse.json(
@@ -120,7 +120,7 @@ export async function PUT(request: NextRequest, context: RouteContext) {
       updates.password = await bcrypt.hash(password, 10);
     }
 
-    const user = await User.findByIdAndUpdate(
+    const user: any = await User.findByIdAndUpdate(
       idStr,
       { $set: updates },
       { new: true, runValidators: true }
@@ -134,7 +134,7 @@ export async function PUT(request: NextRequest, context: RouteContext) {
     // Convertir _id en id pour compatibilité
     const formattedUser = {
       ...user,
-      id: user._id.toString(),
+      id: user._id?.toString() || user.id || idStr,
     };
 
     console.log('✅ API: User updated successfully:', formattedUser.username, 'status:', formattedUser.status);
