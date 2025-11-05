@@ -333,17 +333,30 @@ export default function AdminPage() {
   const handleDeleteMember = async (userId: string) => {
     if (!user) return;
     
-    if (!userId) {
+    // Vérifier que l'ID est valide AVANT toute autre opération
+    if (!userId || userId === 'undefined' || userId === 'null' || String(userId).trim() === '') {
       alert({
         title: "Erreur",
         message: "L'ID du membre n'est pas défini",
         type: "danger",
       });
-      console.error('❌ userId is undefined');
+      console.error('❌ userId is undefined or invalid:', userId);
       return;
     }
     
-    const memberToRemove = members.find(m => m.id === userId);
+    // Vérifier le format MongoDB ObjectId (24 caractères hex) AVANT de chercher le membre
+    const userIdStr = String(userId).trim();
+    if (userIdStr.length !== 24 || !/^[0-9a-fA-F]{24}$/.test(userIdStr)) {
+      alert({
+        title: "Erreur",
+        message: "ID utilisateur invalide : format MongoDB requis (24 caractères hex)",
+        type: "danger",
+      });
+      console.error('❌ Invalid MongoDB ID format:', userIdStr);
+      return;
+    }
+    
+    const memberToRemove = members.find(m => m.id === userIdStr);
     if (!memberToRemove) {
       alert({
         title: "Erreur",
@@ -371,13 +384,7 @@ export default function AdminPage() {
       cancelText: "Annuler",
     }, async () => {
       try {
-        const userIdStr = String(userId).trim();
-        
-        // Vérifier que l'ID est un string MongoDB valide
-        if (userIdStr.length !== 24 || !/^[0-9a-fA-F]{24}$/.test(userIdStr)) {
-          throw new Error("ID utilisateur invalide : format MongoDB requis (24 caractères hex)");
-        }
-        
+        // userIdStr est déjà validé au début de la fonction
         console.log('📝 Deleting member:', userIdStr);
         const success = await deleteUser(userIdStr);
         
